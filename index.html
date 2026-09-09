@@ -3,542 +3,691 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sairam Student All-in-One Hub 3D</title>
+  <title>Sairam Student Portal Hub 3D</title>
+
+  <!-- Google Search & Standard Browser Favicons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.google.com/s2/favicons?domain=sairam.edu.in&sz=64">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://www.google.com/s2/favicons?domain=sairam.edu.in&sz=128">
+
+  <!-- Mobile Home Screen / Shortcut Icons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.google.com/s2/favicons?domain=sairam.edu.in&sz=128">
+  <link rel="apple-touch-icon-precomposed" href="https://www.google.com/s2/favicons?domain=sairam.edu.in&sz=128">
+
+  <!-- Google Fonts & Three.js CDN -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
   <style>
     :root {
-      --bg-color: #05070f;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --sairam-gold: #fbbf24;
-      --sairam-blue: #00f0ff;
-      --glass-bg: rgba(15, 23, 42, 0.45);
-      --glass-border: rgba(255, 255, 255, 0.12);
-      --glass-blur: blur(20px);
+      --bg-dark: #030712;
+      --card-bg: rgba(15, 23, 42, 0.55);
+      --card-border: rgba(56, 189, 248, 0.18);
+      --card-border-hover: rgba(56, 189, 248, 0.75);
+      --accent: #38bdf8;
+      --accent-purple: #818cf8;
+      --accent-glow: rgba(56, 189, 248, 0.35);
+      --text: #f8fafc;
+      --text-sub: #94a3b8;
     }
 
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      color-scheme: dark;
     }
 
     body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
       overflow-x: hidden;
+      padding: 2rem 1.5rem;
     }
 
-    /* 3D WebGL Canvas Layer */
-    #webgl {
+    #webgl-bg {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      z-index: 0;
+      z-index: -1;
       pointer-events: none;
     }
 
-    /* UI Content Overlay */
-    .content-wrapper {
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      flex: 1;
       position: relative;
       z-index: 1;
-      width: 100%;
     }
 
-    /* Header & Navigation */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.2rem 4rem;
-      z-index: 100;
-      background: rgba(5, 7, 15, 0.7);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--glass-border);
+    .header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+      perspective: 1000px;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .logo-badge {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--sairam-gold), #f59e0b);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .header h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
       font-weight: 800;
-      color: #000;
-      font-size: 1.1rem;
-    }
-
-    .brand-title {
-      font-weight: 800;
-      font-size: 1.25rem;
-      letter-spacing: 1px;
-      background: linear-gradient(135deg, #ffffff 0%, var(--sairam-gold) 100%);
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff 20%, var(--accent) 70%, var(--accent-purple) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      margin-bottom: 0.75rem;
+      text-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
+    .header p {
+      color: var(--text-sub);
+      font-size: 1.05rem;
+      font-weight: 400;
     }
 
-    .nav-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: color 0.3s ease;
+    .search-wrapper {
+      position: relative;
+      max-width: 540px;
+      margin: 1.75rem auto 0 auto;
+      perspective: 1000px;
     }
 
-    .nav-links a:hover {
-      color: var(--sairam-blue);
-    }
-
-    .user-pill {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0.5rem 1.2rem;
+    .search-box {
+      width: 100%;
+      padding: 1rem 1.5rem;
       border-radius: 30px;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--card-border);
+      background: rgba(15, 23, 42, 0.65);
+      color: var(--text);
+      font-size: 1rem;
+      font-family: inherit;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      outline: none;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 1px rgba(255, 255, 255, 0.1);
     }
 
-    .user-avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--sairam-blue);
-    }
-
-    /* Hero Dashboard Section */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding: 8rem 8% 4rem 8%;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .hero-content {
-      max-width: 600px;
-    }
-
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 0.4rem 1rem;
-      border-radius: 20px;
-      background: rgba(0, 240, 255, 0.08);
-      border: 1px solid rgba(0, 240, 255, 0.25);
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--sairam-blue);
-      margin-bottom: 1.5rem;
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--sairam-blue);
-      box-shadow: 0 0 10px var(--sairam-blue);
-    }
-
-    .hero h1 {
-      font-size: clamp(2.8rem, 5vw, 4.5rem);
-      font-weight: 800;
-      line-height: 1.1;
-      margin-bottom: 1.2rem;
-    }
-
-    .hero p {
-      font-size: 1.1rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 2.5rem;
-    }
-
-    .quick-stats {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.2rem;
-      margin-bottom: 2.5rem;
-    }
-
-    .stat-card {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: var(--glass-blur);
-      padding: 1.25rem;
-      border-radius: 18px;
-    }
-
-    .stat-card .number {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: var(--sairam-gold);
-    }
-
-    .stat-card .label {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-
-    /* Academic Hub Modules Section */
-    .hub-grid-section {
-      padding: 4rem 8% 8rem 8%;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: 4rem;
-    }
-
-    .section-header h2 {
-      font-size: 2.2rem;
-      font-weight: 800;
-      margin-bottom: 0.5rem;
-    }
-
-    .section-header p {
-      color: var(--text-muted);
+    .search-box:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 25px var(--accent-glow), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px) scale(1.01);
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 2rem;
+      perspective: 1200px;
     }
 
-    .hub-card {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: var(--glass-blur);
-      border-radius: 24px;
-      padding: 2.2rem;
-      transition: all 0.3s ease;
-      cursor: pointer;
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      text-decoration: none;
+      color: inherit;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       position: relative;
       overflow: hidden;
+      transform-style: preserve-3d;
+      transition: border-color 0.4s ease, box-shadow 0.4s ease;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      will-change: transform;
     }
 
-    .hub-card:hover {
-      transform: translateY(-8px);
-      border-color: rgba(251, 191, 36, 0.4);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    /* Dynamic spotlight glare layer */
+    .card-glare {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.12), transparent 40%);
+      border-radius: inherit;
+      z-index: 2;
     }
 
-    .hub-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--glass-border);
+    .card:hover {
+      border-color: var(--card-border-hover);
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 0 30px var(--accent-glow);
+    }
+
+    .card-content {
+      position: relative;
+      z-index: 3;
+      transform-style: preserve-3d;
+    }
+
+    .card-top {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
+      transform: translateZ(25px);
     }
 
-    .hub-card h3 {
+    .tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      background: rgba(56, 189, 248, 0.12);
+      padding: 0.3rem 0.75rem;
+      border-radius: 30px;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      object-fit: contain;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      transform: translateZ(35px);
+      transition: transform 0.3s ease;
+    }
+
+    .card h3 {
+      margin: 0 0 0.5rem 0;
       font-size: 1.25rem;
       font-weight: 700;
-      margin-bottom: 0.6rem;
+      transform: translateZ(30px);
+      transition: color 0.3s ease;
     }
 
-    .hub-card p {
-      color: var(--text-muted);
-      font-size: 0.92rem;
-      line-height: 1.6;
-    }
-
-    /* Footer */
-    footer {
-      border-top: 1px solid var(--glass-border);
-      padding: 2.5rem 8%;
-      text-align: center;
-      color: var(--text-muted);
+    .card p {
+      margin: 0 0 1.5rem 0;
       font-size: 0.88rem;
-      background: rgba(5, 7, 15, 0.8);
-      backdrop-filter: blur(12px);
+      color: var(--text-sub);
+      line-height: 1.5;
+      transform: translateZ(20px);
     }
 
-    @media (max-width: 768px) {
-      nav { padding: 1rem 1.5rem; }
-      .nav-links { display: none; }
-      .hero { padding: 6rem 1.5rem 2rem 1.5rem; }
-      .hub-grid-section { padding: 2rem 1.5rem 4rem 1.5rem; }
+    .card-action {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      transform: translateZ(25px);
+      position: relative;
+      z-index: 3;
+    }
+
+    .card-action span {
+      display: inline-block;
+      margin-left: 6px;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .card:hover .card-action span {
+      transform: translateX(6px) scale(1.2);
+    }
+
+    .footer {
+      max-width: 1200px;
+      margin: 4rem auto 1rem auto;
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 1.75rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .developer-badge {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--card-border);
+      padding: 0.6rem 1.4rem;
+      border-radius: 30px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .developer-badge:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 20px var(--accent-glow);
+      transform: translateY(-3px) scale(1.02);
+      color: #fff;
+    }
+
+    .developer-badge strong {
+      color: var(--accent);
     }
   </style>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
-  <!-- 3D WebGL Canvas Backdrop -->
-  <canvas id="webgl"></canvas>
+  <!-- Three.js Interactive 3D Background Canvas -->
+  <canvas id="webgl-bg"></canvas>
 
-  <!-- Interactive UI Overlay -->
-  <div class="content-wrapper">
-    <nav>
-      <div class="brand">
-        <div class="logo-badge">S</div>
-        <span class="brand-title">SAIRAM HUB</span>
+  <div class="container">
+    <div class="header">
+      <h1>Student All-in-One Hub</h1>
+      <p>Quick access to all Sairam academic & learning portals</p>
+      <div class="search-wrapper">
+        <input type="text" id="searchInput" class="search-box" aria-label="Search portals" placeholder="Search platforms..." onkeyup="filterCards()">
       </div>
-      <ul class="nav-links">
-        <li><a href="#dashboard">Dashboard</a></li>
-        <li><a href="#academics">Academics</a></li>
-        <li><a href="#resources">Resources</a></li>
-        <li><a href="#events">Campus Life</a></li>
-      </ul>
-      <div class="user-pill">
-        <div class="user-avatar"></div>
-        <span style="font-size: 0.85rem; font-weight: 600;">SEC Student</span>
-      </div>
-    </nav>
+    </div>
 
-    <section class="hero" id="dashboard">
-      <div class="hero-content">
-        <div class="status-badge">
-          <span class="status-dot"></span> SAIL AI Portal Connected
-        </div>
-        <h1>Student All-in-One <br>3D Workspace</h1>
-        <p>Access attendance trackers, exam schedules, course materials, and real-time academic performance in an immersive spatial UI.</p>
-        
-        <div class="quick-stats">
-          <div class="stat-card">
-            <div class="number">94.2%</div>
-            <div class="label">Overall Attendance</div>
+    <div class="grid" id="portalGrid">
+
+      <a href="https://edumate.sairam.edu.in/" target="_blank" class="card" data-title="EDUMATE Sri Sairam Engineering College SEC">
+        <div class="card-glare"></div>
+        <div class="card-content">
+          <div class="card-top">
+            <span class="tag">Academics</span>
+            <img src="https://www.google.com/s2/favicons?domain=sairam.edu.in&sz=64" class="card-icon" alt="Edumate">
           </div>
-          <div class="stat-card">
-            <div class="number">8.95</div>
-            <div class="label">Current CGPA</div>
+          <h3>Edumate Portal🪪</h3>
+          <p>SEC Edumate login for academic tracking, attendance, and internal marks.</p>
+        </div>
+        <div class="card-action">Launch <span>&rarr;</span></div>
+      </a> 
+
+      <a href="https://web.nen.wfglobal.org/" target="_blank" class="card" data-title="NEN Wadhwani Foundation Entrepreneurship Network">
+        <div class="card-glare"></div>
+        <div class="card-content">
+          <div class="card-top">
+            <span class="tag">Entrepreneurship</span>
+            <img src="https://www.google.com/s2/favicons?domain=nen.wfglobal.org&sz=64" class="card-icon" alt="NEN WFGlobal">
           </div>
+          <h3>Wadhwani Portal 🚀</h3>
+          <p>Wadhwani Foundation National Entrepreneurship Network platform for startup support and course tracking.</p>
         </div>
-      </div>
-    </section>
+        <div class="card-action">Launch <span>&rarr;</span></div>
+      </a>
 
-    <section class="hub-grid-section" id="academics">
-      <div class="section-header">
-        <h2>Academic Hub Modules</h2>
-        <p>Centralized tools designed for Sairam Institutions students.</p>
-      </div>
-
-      <div class="grid">
-        <div class="hub-card">
-          <div class="hub-icon">🎓</div>
-          <h3>Academic Performance</h3>
-          <p>Track internal marks, semester grades, and CGPA trends with interactive analytics.</p>
+      <a href="https://sairam.edu.in" target="_blank" class="card" data-title="Sri Sairam Engineering College SEC Main Site">
+        <div class="card-glare"></div>
+        <div class="card-content">
+          <div class="card-top">
+            <span class="tag">Academics</span>
+            <img src="https://www.google.com/s2/favicons?domain=sairam.edu.in&sz=64" class="card-icon" alt="SEC">
+          </div>
+          <h3>SEC Main Site🏢</h3>
+          <p>Official Sri Sairam Engineering College institutional portal and updates.</p>
         </div>
+        <div class="card-action">Launch <span>&rarr;</span></div>
+      </a> 
 
-        <div class="hub-card">
-          <div class="hub-icon">📅</div>
-          <h3>Smart Attendance</h3>
-          <p>Real-time subject-wise percentage updates and leave application request tools.</p>
+      <a href="https://pgpa.sairam.edu.in/" target="_blank" class="card" data-title="Sairam PGPA Portal Grievance Parent Student Academics SEC">
+        <div class="card-glare"></div>
+        <div class="card-content">
+          <div class="card-top">
+            <span class="tag">Academics</span>
+            <img src="https://www.google.com/s2/favicons?domain=sairam.edu.in&sz=64" class="card-icon" alt="Sairam PGPA">
+          </div>
+          <h3>Sairam PGPA Portal👾</h3>
+          <p>Official Sairam Grievance Redressal Portal for student and parent institutional feedback.</p>
         </div>
+        <div class="card-action">Launch <span>&rarr;</span></div>
+      </a>
 
-        <div class="hub-card">
-          <div class="hub-icon">📚</div>
-          <h3>Digital Library & Notes</h3>
-          <p>Instant access to lecture slides, lab manuals, and previous year question papers.</p>
+      <a href="https://sailstudent.sairamit.edu.in/" target="_blank" class="card" data-title="AI Powered Learning Sairam SAIL Student Portal Login Edwisely">
+        <div class="card-glare"></div>
+        <div class="card-content">
+          <div class="card-top">
+            <span class="tag">AI Tools</span>
+            <img src="https://www.google.com/s2/favicons?domain=sairam.edu.in&sz=64" class="card-icon" alt="SAIL AI">
+          </div>
+          <h3>SAIL AI Learning (Student)🕵️‍♀️</h3>
+          <p>Sairam AI-driven personalized learning platform for assessments and analytics.</p>
         </div>
+        <div class="card-action">Launch <span>&rarr;</span></div>
+      </a>
 
-        <div class="hub-card">
-          <div class="hub-icon">⚡</div>
-          <h3>SAIL AI Companion</h3>
-          <p>Personalized learning pathways and automated daily question-of-the-day (QOD) drills.</p>
+      <a href="https://project.sairamtap.edu.in/" target="_blank" class="card" data-title="Sairam project Login">
+        <div class="card-glare"></div>
+        <div class="card-content">
+          <div class="card-top">
+            <span class="tag">AI Tools</span>
+            <img src="https://www.google.com/s2/favicons?domain=sairam.edu.in&sz=64" class="card-icon" alt="sairamproject">
+          </div>
+          <h3>Sairam project🤖</h3>
+          <p>Student project portal for tracking progress, submissions, and reviews.</p>
         </div>
+        <div class="card-action">Launch <span>&rarr;</span></div>
+      </a>
 
-        <div class="hub-card">
-          <div class="hub-icon">🏆</div>
-          <h3>Innovation Centre</h3>
-          <p>Register for hackathons, project exhibitions, and patents via Sri Leo Muthu Innovation Lab.</p>
+      <a href="https://sailmentor.sairam.edu.in/" target="_blank" class="card" data-title="SAIL Mentor Sairam AI Powered Learning Faculty Login">
+        <div class="card-glare"></div>
+        <div class="card-content">
+          <div class="card-top">
+            <span class="tag">AI Tools</span>
+            <img src="https://www.google.com/s2/favicons?domain=sairam.edu.in&sz=64" class="card-icon" alt="SAIL Mentor">
+          </div>
+          <h3>SAIL AI Learning (Mentor)</h3>
+          <p>Faculty portal for AI-powered student coaching and curriculum management.</p>
         </div>
+        <div class="card-action">Launch <span>&rarr;</span></div>
+      </a>
 
-        <div class="hub-card">
-          <div class="hub-icon">💼</div>
-          <h3>Placement Portal</h3>
-          <p>Skill assessments, mock interview schedules, and active campus drive alerts.</p>
+      <a href="https://classroom.google.com" target="_blank" class="card" data-title="Google Classroom Learning Academics">
+        <div class="card-glare"></div>
+        <div class="card-content">
+          <div class="card-top">
+            <span class="tag">Academics</span>
+            <img src="https://www.google.com/s2/favicons?domain=classroom.google.com&sz=64" class="card-icon" alt="Classroom">
+          </div>
+          <h3>Google Classroom</h3>
+          <p>Access virtual classes, track course materials, and submit assignments.</p>
         </div>
-      </div>
-    </section>
+        <div class="card-action">Launch <span>&rarr;</span></div>
+      </a>
 
-    <footer>
-      <p>&copy; 2026 Sairam Group of Institutions — All-in-One Student Portal</p>
-    </footer>
+      <a href="https://www.skillrack.com" target="_blank" class="card" data-title="skillrack.com programming coding">
+        <div class="card-glare"></div>
+        <div class="card-content">
+          <div class="card-top">
+            <span class="tag">Skill & Coding</span>
+            <img src="https://www.google.com/s2/favicons?domain=skillrack.com&sz=64" class="card-icon" alt="SkillRack">
+          </div>
+          <h3>SkillRack</h3>
+          <p>Programming practice portal for daily coding challenges and assessments.</p>
+        </div>
+        <div class="card-action">Launch <span>&rarr;</span></div>
+      </a>
+
+      <a href="https://skillrack.gururaja.in/" target="_blank" class="card" data-title="SkillRack Tracker profile stats">
+        <div class="card-glare"></div>
+        <div class="card-content">
+          <div class="card-top">
+            <span class="tag">Skill & Coding</span>
+            <img src="https://www.google.com/s2/favicons?domain=skillrack.com&sz=64" class="card-icon" alt="Tracker">
+          </div>
+          <h3>SkillRack Tracker</h3>
+          <p>Direct dashboard access to review coding progress, rank, and solves.</p>
+        </div>
+        <div class="card-action">Launch <span>&rarr;</span></div>
+      </a>
+
+      <a href="https://in.linkedin.com" target="_blank" class="card" data-title="LinkedIn India">
+        <div class="card-glare"></div>
+        <div class="card-content">
+          <div class="card-top">
+            <span class="tag">Professional</span>
+            <img src="https://www.google.com/s2/favicons?domain=linkedin.com&sz=64" class="card-icon" alt="LinkedIn">
+          </div>
+          <h3>LinkedIn 💼</h3>
+          <p>Manage your professional identity. Build and engage with your professional network.</p>
+        </div>
+        <div class="card-action">Launch <span>&rarr;</span></div>
+      </a>
+
+      <a href="https://swayam.gov.in" target="_blank" class="card" data-title="Swayam Central NPTEL Courses">
+        <div class="card-glare"></div>
+        <div class="card-content">
+          <div class="card-top">
+            <span class="tag">Learning</span>
+            <img src="https://www.google.com/s2/favicons?domain=swayam.gov.in&sz=64" class="card-icon" alt="Swayam">
+          </div>
+          <h3>Swayam Central</h3>
+          <p>Government portal for NPTEL certifications and online higher education courses.</p>
+        </div>
+        <div class="card-action">Launch <span>&rarr;</span></div>
+      </a>
+
+      <a href="https://www.coursera.org" target="_blank" class="card" data-title="Coursera online learning degrees">
+        <div class="card-glare"></div>
+        <div class="card-content">
+          <div class="card-top">
+            <span class="tag">Learning</span>
+            <img src="https://www.google.com/s2/favicons?domain=coursera.org&sz=64" class="card-icon" alt="Coursera">
+          </div>
+          <h3>Coursera</h3>
+          <p>Global e-learning platform offering professional certificates and specialization tracks.</p>
+        </div>
+        <div class="card-action">Launch <span>&rarr;</span></div>
+      </a>
+
+      <a href="https://accounts.digitallocker.gov.in/signin/oauth_partner/%2Foauth2%2F1%2Fauthorize" target="_blank" class="card" data-title="DigiLocker Government Digital Documents">
+        <div class="card-glare"></div>
+        <div class="card-content">
+          <div class="card-top">
+            <span class="tag">Government</span>
+            <img src="https://www.google.com/s2/favicons?domain=digitallocker.gov.in&sz=64" class="card-icon" alt="DigiLocker">
+          </div>
+          <h3>DigiLocker</h3>
+          <p>Official cloud platform for secure storage and verification of academic documents.</p>
+        </div>
+        <div class="card-action">Launch <span>&rarr;</span></div>
+      </a>
+
+      <a href="https://mybharat.gov.in" target="_blank" class="card" data-title="Home MYBharat youth portal my bharath">
+        <div class="card-glare"></div>
+        <div class="card-content">
+          <div class="card-top">
+            <span class="tag">Government</span>
+            <img src="https://www.google.com/s2/favicons?domain=mybharat.gov.in&sz=64" class="card-icon" alt="MYBharat">
+          </div>
+          <h3>MYBharat Portal</h3>
+          <p>National initiative for youth empowerment, skill development, and volunteering.</p>
+        </div>
+        <div class="card-action">Launch <span>&rarr;</span></div>
+      </a>
+
+      <a href="https://www.mygov.in" target="_blank" class="card" data-title="MyGov.in Citizen Engagement Governance my government">
+        <div class="card-glare"></div>
+        <div class="card-content">
+          <div class="card-top">
+            <span class="tag">Government</span>
+            <img src="https://www.google.com/s2/favicons?domain=mygov.in&sz=64" class="card-icon" alt="MyGov">
+          </div>
+          <h3>MyGov.in</h3>
+          <p>Citizen participation platform for national governance and hackathons.</p>
+        </div>
+        <div class="card-action">Launch <span>&rarr;</span></div>
+      </a>
+
+      <a href="https://fitindia.gov.in" target="_blank" class="card" data-title="Fit India Movement">
+        <div class="card-glare"></div>
+        <div class="card-content">
+          <div class="card-top">
+            <span class="tag">Fitness</span>
+            <img src="https://www.google.com/s2/favicons?domain=fitindia.gov.in&sz=64" class="card-icon" alt="Fit India">
+          </div>
+          <h3>Fit India 🏃</h3>
+          <p>Official portal for the Fit India Movement to encourage a healthy and active lifestyle.</p>
+        </div>
+        <div class="card-action">Launch <span>&rarr;</span></div>
+      </a>
+
+    </div>
   </div>
 
-  <!-- THREE.JS 3D GRAPHICS LOGIC -->
+  <footer class="footer">
+    <a href="https://balaji-virid.vercel.app/" target="_blank" rel="noopener noreferrer" class="developer-badge">
+      Developed by <strong>BALAJI P</strong> | Cybersecurity Student click for connection
+    </a>
+  </footer>
+
   <script>
-    // 1. Scene & Renderer Setup
-    const canvas = document.querySelector('#webgl');
-    const scene = new THREE.Scene();
+    /* --- 1. Search Filter Logic --- */
+    function filterCards() {
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      const cards = document.querySelectorAll('.card');
 
-    const sizes = {
-      width: window.innerWidth,
-      height: window.innerHeight
-    };
-
-    const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
-    camera.position.z = 5;
-    scene.add(camera);
-
-    const renderer = new THREE.WebGLRenderer({
-      canvas: canvas,
-      antialias: true,
-      alpha: true
-    });
-    renderer.setSize(sizes.width, sizes.height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    // 2. Dynamic Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
-    scene.add(ambientLight);
-
-    const goldLight = new THREE.PointLight(0xfbbf24, 5, 12);
-    goldLight.position.set(4, 3, 2);
-    scene.add(goldLight);
-
-    const cyanLight = new THREE.PointLight(0x00f0ff, 5, 12);
-    cyanLight.position.set(-4, -2, 2);
-    scene.add(cyanLight);
-
-    // 3. Frosted Glass Central Object (Torus Knot Hub Core)
-    const geometry = new THREE.TorusKnotGeometry(1.1, 0.36, 128, 32);
-    const glassMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0xffffff,
-      metalness: 0.1,
-      roughness: 0.18,      // Frosted refraction texture
-      transmission: 0.95,   // Glass optical transparency
-      ior: 1.5,            // Index of refraction
-      thickness: 1.6,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.1,
-      transparent: true
-    });
-
-    const mainCore = new THREE.Mesh(geometry, glassMaterial);
-    mainCore.position.x = 1.4; // Align with desktop text layout
-    scene.add(mainCore);
-
-    // Orbiting Geometric Satellites
-    const orbitGroup = new THREE.Group();
-    const icoGeo = new THREE.IcosahedronGeometry(0.35, 0);
-    const wireMatGold = new THREE.MeshBasicMaterial({ color: 0xfbbf24, wireframe: true });
-    const wireMatCyan = new THREE.MeshBasicMaterial({ color: 0x00f0ff, wireframe: true });
-
-    const sat1 = new THREE.Mesh(icoGeo, wireMatGold);
-    sat1.position.set(-2.2, 1.5, -1);
-
-    const sat2 = new THREE.Mesh(icoGeo, wireMatCyan);
-    sat2.position.set(2.2, -1.8, -1);
-
-    orbitGroup.add(sat1, sat2);
-    scene.add(orbitGroup);
-
-    // Layout responsiveness for mobile devices
-    if (window.innerWidth < 768) {
-      mainCore.position.x = 0;
-      mainCore.position.y = 1.0;
+      cards.forEach(card => {
+        const textContent = card.innerText.toLowerCase();
+        const dataTitle = (card.getAttribute('data-title') || '').toLowerCase();
+        const isVisible = dataTitle.includes(query) || textContent.includes(query);
+        card.style.display = isVisible ? "flex" : "none";
+      });
     }
 
-    // 4. Smooth Mouse Interaction (Lerp Physics)
-    const targetRotation = { x: 0, y: 0 };
-    let scrollY = 0;
+    /* --- 2. Advanced Interactive 3D Card Physics --- */
+    document.querySelectorAll('.card').forEach(card => {
+      let reqId = null;
 
-    window.addEventListener('mousemove', (e) => {
-      const mouseX = (e.clientX / sizes.width) * 2 - 1;
-      const mouseY = -(e.clientY / sizes.height) * 2 + 1;
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateX = ((y - centerY) / centerY) * -14;
+        const rotateY = ((x - centerX) / centerX) * 14;
 
-      targetRotation.x = mouseY * 0.5;
-      targetRotation.y = mouseX * 0.5;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+
+        if (reqId) cancelAnimationFrame(reqId);
+        reqId = requestAnimationFrame(() => {
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(12px)`;
+        });
+      });
+
+      card.addEventListener('mouseleave', () => {
+        if (reqId) cancelAnimationFrame(reqId);
+        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)`;
+      });
     });
 
-    window.addEventListener('scroll', () => {
-      scrollY = window.scrollY;
+    /* --- 3. Three.js Modern 3D WebGL Background Engine --- */
+    const canvas = document.getElementById('webgl-bg');
+    const scene = new THREE.Scene();
+
+    // Camera setup
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 30;
+
+    // Renderer setup
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    // Particle Cloud Geometry
+    const particleCount = window.innerWidth < 768 ? 400 : 900;
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    const scales = new Float32Array(particleCount);
+
+    for (let i = 0; i < particleCount * 3; i += 3) {
+      positions[i] = (Math.random() - 0.5) * 80;
+      positions[i + 1] = (Math.random() - 0.5) * 80;
+      positions[i + 2] = (Math.random() - 0.5) * 80;
+      scales[i / 3] = Math.random() * 1.5 + 0.5;
+    }
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+    // Particle Material
+    const material = new THREE.PointsMaterial({
+      color: 0x38bdf8,
+      size: 0.35,
+      transparent: true,
+      opacity: 0.6,
+      blending: THREE.AdditiveBlending
     });
 
+    const particleSystem = new THREE.Points(geometry, material);
+    scene.add(particleSystem);
+
+    // Dynamic Geometric Wireframe Meshes
+    const torusGeometry = new THREE.TorusKnotGeometry(8, 2.2, 120, 16);
+    const torusMaterial = new THREE.MeshBasicMaterial({
+      color: 0x818cf8,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.12
+    });
+    const torusKnot = new THREE.Mesh(torusGeometry, torusMaterial);
+    torusKnot.position.set(-20, 10, -15);
+    scene.add(torusKnot);
+
+    const icoGeometry = new THREE.IcosahedronGeometry(7, 1);
+    const icoMaterial = new THREE.MeshBasicMaterial({
+      color: 0x38bdf8,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.15
+    });
+    const icoMesh = new THREE.Mesh(icoGeometry, icoMaterial);
+    icoMesh.position.set(22, -12, -10);
+    scene.add(icoMesh);
+
+    // Mouse Movement Parallax Tracking
+    let targetMouseX = 0;
+    let targetMouseY = 0;
+    let currentMouseX = 0;
+    let currentMouseY = 0;
+
+    window.addEventListener('mousemove', (event) => {
+      targetMouseX = (event.clientX / window.innerWidth - 0.5) * 2;
+      targetMouseY = (event.clientY / window.innerHeight - 0.5) * 2;
+    });
+
+    // Window Resize Handler
     window.addEventListener('resize', () => {
-      sizes.width = window.innerWidth;
-      sizes.height = window.innerHeight;
-
-      camera.aspect = sizes.width / sizes.height;
+      camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
-
-      renderer.setSize(sizes.width, sizes.height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-      if (window.innerWidth < 768) {
-        mainCore.position.x = 0;
-        mainCore.position.y = 1.0;
-      } else {
-        mainCore.position.x = 1.4;
-        mainCore.position.y = 0;
-      }
+      renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
-    // 5. Animation Loop
+    // Render Loop
     const clock = new THREE.Clock();
 
-    const tick = () => {
+    function animate() {
+      requestAnimationFrame(animate);
+
       const elapsedTime = clock.getElapsedTime();
 
-      // Inertial movement easing
-      mainCore.rotation.x += (targetRotation.x - mainCore.rotation.x) * 0.05;
-      mainCore.rotation.y += (targetRotation.y - mainCore.rotation.y) * 0.05;
+      // Smooth mouse interpolation (lerp)
+      currentMouseX += (targetMouseX - currentMouseX) * 0.05;
+      currentMouseY += (targetMouseY - currentMouseY) * 0.05;
 
-      // Continuous rotation
-      mainCore.rotation.z = elapsedTime * 0.12;
+      // Rotate objects
+      torusKnot.rotation.x = elapsedTime * 0.15;
+      torusKnot.rotation.y = elapsedTime * 0.2;
 
-      // Scroll-linked position movement
-      mainCore.position.y = (scrollY * 0.0012) + (window.innerWidth < 768 ? 1.0 : 0);
-      camera.position.z = 5 + (scrollY * 0.001);
+      icoMesh.rotation.x = -elapsedTime * 0.1;
+      icoMesh.rotation.y = elapsedTime * 0.15;
 
-      // Rotate orbital background shapes
-      sat1.rotation.x = elapsedTime * 0.4;
-      sat1.rotation.y = elapsedTime * 0.6;
-      sat2.rotation.x = -elapsedTime * 0.4;
-      sat2.rotation.y = -elapsedTime * 0.6;
+      particleSystem.rotation.y = elapsedTime * 0.03;
+
+      // Parallax scene camera movement
+      camera.position.x = currentMouseX * 4;
+      camera.position.y = -currentMouseY * 4;
+      camera.lookAt(scene.position);
 
       renderer.render(scene, camera);
-      requestAnimationFrame(tick);
-    };
+    }
 
-    tick();
+    animate();
   </script>
 </body>
 </html>
