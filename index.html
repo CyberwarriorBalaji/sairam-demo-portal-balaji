@@ -148,7 +148,6 @@
       will-change: transform;
     }
 
-    /* Dynamic spotlight glare layer */
     .card-glare {
       position: absolute;
       top: 0;
@@ -594,13 +593,11 @@
     const particleCount = window.innerWidth < 768 ? 400 : 900;
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
-    const scales = new Float32Array(particleCount);
 
     for (let i = 0; i < particleCount * 3; i += 3) {
       positions[i] = (Math.random() - 0.5) * 80;
       positions[i + 1] = (Math.random() - 0.5) * 80;
       positions[i + 2] = (Math.random() - 0.5) * 80;
-      scales[i / 3] = Math.random() * 1.5 + 0.5;
     }
 
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -626,7 +623,7 @@
       opacity: 0.12
     });
     const torusKnot = new THREE.Mesh(torusGeometry, torusMaterial);
-    torusKnot.position.set(-20, 10, -15);
+    torusKnot.position.set(-22, 12, -15);
     scene.add(torusKnot);
 
     const icoGeometry = new THREE.IcosahedronGeometry(7, 1);
@@ -637,8 +634,108 @@
       opacity: 0.15
     });
     const icoMesh = new THREE.Mesh(icoGeometry, icoMaterial);
-    icoMesh.position.set(22, -12, -10);
+    icoMesh.position.set(24, -14, -10);
     scene.add(icoMesh);
+
+    /* --- 4. Procedural 3D Spaceship Generator --- */
+    function createSpaceship() {
+      const shipGroup = new THREE.Group();
+
+      // Fuselage / Main Body
+      const bodyGeo = new THREE.ConeGeometry(0.7, 3.2, 8);
+      const bodyMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, wireframe: true });
+      const body = new THREE.Mesh(bodyGeo, bodyMat);
+      body.rotation.x = Math.PI / 2;
+      shipGroup.add(body);
+
+      // Cockpit Window
+      const cockpitGeo = new THREE.SphereGeometry(0.45, 8, 8);
+      const cockpitMat = new THREE.MeshBasicMaterial({ color: 0x818cf8, wireframe: false, transparent: true, opacity: 0.85 });
+      const cockpit = new THREE.Mesh(cockpitGeo, cockpitMat);
+      cockpit.position.set(0, 0.25, 0.4);
+      shipGroup.add(cockpit);
+
+      // Main Wings
+      const wingGeo = new THREE.BoxGeometry(3.6, 0.08, 1.2);
+      const wingMat = new THREE.MeshBasicMaterial({ color: 0x0284c7, wireframe: true });
+      const wings = new THREE.Mesh(wingGeo, wingMat);
+      wings.position.set(0, -0.15, -0.2);
+      shipGroup.add(wings);
+
+      // Tail Fin
+      const finGeo = new THREE.BoxGeometry(0.08, 1.2, 0.8);
+      const finMat = new THREE.MeshBasicMaterial({ color: 0x818cf8, wireframe: true });
+      const fin = new THREE.Mesh(finGeo, finMat);
+      fin.position.set(0, 0.7, -0.8);
+      shipGroup.add(fin);
+
+      // Thruster Flame Glow
+      const thrusterGeo = new THREE.ConeGeometry(0.4, 1.2, 8);
+      const thrusterMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, wireframe: true, transparent: true, opacity: 0.8 });
+      const thruster = new THREE.Mesh(thrusterGeo, thrusterMat);
+      thruster.rotation.x = -Math.PI / 2;
+      thruster.position.set(0, 0, -2.1);
+      shipGroup.add(thruster);
+
+      return shipGroup;
+    }
+
+    const spaceship1 = createSpaceship();
+    spaceship1.position.set(-16, -6, -5);
+    spaceship1.scale.set(1.1, 1.1, 1.1);
+    scene.add(spaceship1);
+
+    const spaceship2 = createSpaceship();
+    spaceship2.position.set(18, 10, -12);
+    spaceship2.scale.set(0.85, 0.85, 0.85);
+    scene.add(spaceship2);
+
+    /* --- 5. Procedural 3D Alien Space Plant Generator --- */
+    function createPlant() {
+      const plantGroup = new THREE.Group();
+
+      // Cyber Pot Base
+      const potGeo = new THREE.CylinderGeometry(1.2, 0.8, 1.8, 8);
+      const potMat = new THREE.MeshBasicMaterial({ color: 0x475569, wireframe: true });
+      const pot = new THREE.Mesh(potGeo, potMat);
+      plantGroup.add(pot);
+
+      // Stem
+      const stemGeo = new THREE.CylinderGeometry(0.18, 0.22, 2.8, 8);
+      const stemMat = new THREE.MeshBasicMaterial({ color: 0x10b981, wireframe: true });
+      const stem = new THREE.Mesh(stemGeo, stemMat);
+      stem.position.y = 2.0;
+      plantGroup.add(stem);
+
+      // Central Foliage Leaf Crystal
+      const leafGeo = new THREE.DodecahedronGeometry(1.5, 0);
+      const leafMat = new THREE.MeshBasicMaterial({ color: 0x34d399, wireframe: true, transparent: true, opacity: 0.85 });
+      const foliage = new THREE.Mesh(leafGeo, leafMat);
+      foliage.position.y = 3.6;
+      plantGroup.add(foliage);
+
+      // Side Leaf Bulbs
+      const subLeaf1 = foliage.clone();
+      subLeaf1.scale.set(0.55, 0.55, 0.55);
+      subLeaf1.position.set(0.85, 2.7, 0.4);
+      plantGroup.add(subLeaf1);
+
+      const subLeaf2 = foliage.clone();
+      subLeaf2.scale.set(0.45, 0.45, 0.45);
+      subLeaf2.position.set(-0.8, 2.9, -0.4);
+      plantGroup.add(subLeaf2);
+
+      return plantGroup;
+    }
+
+    const plant1 = createPlant();
+    plant1.position.set(-20, 2, -8);
+    scene.add(plant1);
+
+    const plant2 = createPlant();
+    plant2.position.set(19, -6, -6);
+    plant2.scale.set(0.9, 0.9, 0.9);
+    scene.add(plant2);
 
     // Mouse Movement Parallax Tracking
     let targetMouseX = 0;
@@ -670,7 +767,7 @@
       currentMouseX += (targetMouseX - currentMouseX) * 0.05;
       currentMouseY += (targetMouseY - currentMouseY) * 0.05;
 
-      // Rotate objects
+      // Rotate Wireframe Geometries
       torusKnot.rotation.x = elapsedTime * 0.15;
       torusKnot.rotation.y = elapsedTime * 0.2;
 
@@ -678,6 +775,24 @@
       icoMesh.rotation.y = elapsedTime * 0.15;
 
       particleSystem.rotation.y = elapsedTime * 0.03;
+
+      // Spaceship Animations (Flight Orbit & Tilting)
+      spaceship1.position.x = -16 + Math.sin(elapsedTime * 0.6) * 4;
+      spaceship1.position.y = -6 + Math.cos(elapsedTime * 0.8) * 2.5;
+      spaceship1.rotation.y = elapsedTime * 0.4;
+      spaceship1.rotation.z = Math.sin(elapsedTime * 0.8) * 0.2;
+
+      spaceship2.position.x = 18 + Math.cos(elapsedTime * 0.5) * 3;
+      spaceship2.position.y = 10 + Math.sin(elapsedTime * 0.7) * 2;
+      spaceship2.rotation.y = -elapsedTime * 0.5;
+      spaceship2.rotation.x = Math.cos(elapsedTime * 0.6) * 0.25;
+
+      // Floating Alien Plant Animations
+      plant1.position.y = 2 + Math.sin(elapsedTime * 1.2) * 0.8;
+      plant1.rotation.y = elapsedTime * 0.3;
+
+      plant2.position.y = -6 + Math.cos(elapsedTime * 1.1) * 0.8;
+      plant2.rotation.y = -elapsedTime * 0.25;
 
       // Parallax scene camera movement
       camera.position.x = currentMouseX * 4;
