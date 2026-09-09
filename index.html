@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#030712">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
   <title>Sairam Student Portal Hub 3D - Cyber Defense Edition</title>
 
   <!-- Google Search & Standard Browser Favicons -->
@@ -11,32 +15,34 @@
 
   <!-- Mobile Home Screen / Shortcut Icons -->
   <link rel="apple-touch-icon" sizes="180x180" href="https://www.google.com/s2/favicons?domain=sairam.edu.in&sz=128">
-  <link rel="apple-touch-icon-precomposed" href="https://www.google.com/s2/favicons?domain=sairam.edu.in&sz=128">
 
-  <!-- Google Fonts & Three.js CDN -->
+  <!-- Fonts & Three.js CDN -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
   <style>
     :root {
       --bg-dark: #030712;
-      --card-bg: rgba(10, 20, 38, 0.6);
-      --card-border: rgba(56, 189, 248, 0.2);
-      --card-border-hover: rgba(16, 185, 129, 0.75);
+      --card-bg: rgba(10, 20, 38, 0.65);
+      --card-border: rgba(56, 189, 248, 0.18);
+      --card-border-hover: rgba(16, 185, 129, 0.8);
       --accent: #38bdf8;
       --accent-green: #10b981;
       --accent-red: #ef4444;
-      --accent-glow: rgba(16, 185, 129, 0.35);
+      --accent-glow: rgba(16, 185, 129, 0.3);
       --text: #f8fafc;
       --text-sub: #94a3b8;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
@@ -47,7 +53,7 @@
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
-      padding: 2rem 1.5rem;
+      padding: calc(1.5rem + var(--safe-top)) 1rem calc(1.5rem + var(--safe-bottom)) 1rem;
     }
 
     #webgl-bg {
@@ -71,69 +77,111 @@
 
     .header {
       text-align: center;
-      margin-bottom: 3.5rem;
-      perspective: 1000px;
+      margin-bottom: 2rem;
     }
 
     .header h1 {
-      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-size: clamp(1.75rem, 6vw, 3.2rem);
       font-weight: 800;
       letter-spacing: -0.02em;
       text-transform: uppercase;
       background: linear-gradient(135deg, #ffffff 10%, var(--accent) 50%, var(--accent-green) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 0.75rem;
-      text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      margin-bottom: 0.5rem;
     }
 
     .header p {
       color: var(--text-sub);
-      font-size: 1.05rem;
+      font-size: clamp(0.88rem, 3vw, 1.05rem);
       font-weight: 400;
     }
 
-    .search-wrapper {
+    /* Search & Filter Controls */
+    .controls-wrapper {
+      max-width: 640px;
+      margin: 1.5rem auto 2rem auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .search-box-container {
       position: relative;
-      max-width: 540px;
-      margin: 1.75rem auto 0 auto;
-      perspective: 1000px;
+      width: 100%;
     }
 
     .search-box {
       width: 100%;
-      padding: 1rem 1.5rem;
-      border-radius: 30px;
+      padding: 0.9rem 1.25rem;
+      border-radius: 25px;
       border: 1px solid var(--card-border);
       background: rgba(10, 20, 38, 0.75);
       color: var(--text);
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-family: 'JetBrains Mono', monospace;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       outline: none;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     }
 
     .search-box:focus {
       border-color: var(--accent-green);
-      box-shadow: 0 0 25px var(--accent-glow), inset 0 1px 1px rgba(255, 255, 255, 0.2);
-      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 0 20px var(--accent-glow);
     }
 
+    /* Horizontal Category Chips for Mobile */
+    .filter-bar {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .filter-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip {
+      flex: 0 0 auto;
+      padding: 0.45rem 0.9rem;
+      border-radius: 20px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      color: var(--text-sub);
+      font-size: 0.78rem;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .chip.active, .chip:active {
+      background: rgba(16, 185, 129, 0.18);
+      border-color: var(--accent-green);
+      color: #ffffff;
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    /* Modern Adaptive Grid */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 2rem;
-      perspective: 1200px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+      perspective: 1000px;
     }
 
     .card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 1.5rem;
+      border-radius: 18px;
+      padding: 1.25rem;
       text-decoration: none;
       color: inherit;
       backdrop-filter: blur(16px);
@@ -143,10 +191,14 @@
       justify-content: space-between;
       position: relative;
       overflow: hidden;
-      transform-style: preserve-3d;
-      transition: border-color 0.4s ease, box-shadow 0.4s ease;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-      will-change: transform;
+      transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      touch-action: manipulation;
+    }
+
+    .card:active {
+      transform: scale(0.97) !important;
+      border-color: var(--accent-green);
     }
 
     .card-glare {
@@ -156,157 +208,155 @@
       width: 100%;
       height: 100%;
       pointer-events: none;
-      background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(16, 185, 129, 0.15), transparent 40%);
+      background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(16, 185, 129, 0.12), transparent 40%);
       border-radius: inherit;
       z-index: 2;
-    }
-
-    .card:hover {
-      border-color: var(--card-border-hover);
-      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8), 0 0 30px var(--accent-glow);
     }
 
     .card-content {
       position: relative;
       z-index: 3;
-      transform-style: preserve-3d;
     }
 
     .card-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.25rem;
-      transform: translateZ(25px);
+      margin-bottom: 1rem;
     }
 
     .tag {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
       font-family: 'JetBrains Mono', monospace;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.05em;
       color: var(--accent-green);
       background: rgba(16, 185, 129, 0.12);
-      padding: 0.3rem 0.75rem;
-      border-radius: 30px;
+      padding: 0.25rem 0.65rem;
+      border-radius: 20px;
       border: 1px solid rgba(16, 185, 129, 0.3);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
     .card-icon {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
       border-radius: 10px;
       object-fit: contain;
       background: rgba(255, 255, 255, 0.08);
       padding: 5px;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-      transform: translateZ(35px);
-      transition: transform 0.3s ease;
     }
 
     .card h3 {
-      margin: 0 0 0.5rem 0;
-      font-size: 1.25rem;
+      margin-0 0 0.4rem 0;
+      font-size: 1.15rem;
       font-weight: 700;
-      transform: translateZ(30px);
-      transition: color 0.3s ease;
     }
 
     .card p {
-      margin: 0 0 1.5rem 0;
-      font-size: 0.88rem;
+      margin: 0 0 1.25rem 0;
+      font-size: 0.85rem;
       color: var(--text-sub);
-      line-height: 1.5;
-      transform: translateZ(20px);
+      line-height: 1.45;
     }
 
     .card-action {
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 700;
       font-family: 'JetBrains Mono', monospace;
       color: var(--accent);
       text-transform: uppercase;
-      letter-spacing: 0.06em;
-      transform: translateZ(25px);
-      position: relative;
-      z-index: 3;
     }
 
     .card-action span {
       display: inline-block;
       margin-left: 6px;
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: transform 0.2s ease;
     }
 
     .card:hover .card-action span {
-      transform: translateX(6px) scale(1.2);
+      transform: translateX(4px);
     }
 
     .footer {
       max-width: 1200px;
-      margin: 4rem auto 1rem auto;
+      margin: 3rem auto 0 auto;
       width: 100%;
       display: flex;
-      justify-content: flex-end;
+      justify-content: center;
       align-items: center;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
-      padding-top: 1.75rem;
+      padding-top: 1.5rem;
       position: relative;
       z-index: 1;
     }
 
     .developer-badge {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-family: 'JetBrains Mono', monospace;
       color: var(--text-sub);
       background: rgba(10, 20, 38, 0.8);
       border: 1px solid var(--card-border);
-      padding: 0.6rem 1.4rem;
+      padding: 0.6rem 1.2rem;
       border-radius: 30px;
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-      transition: all 0.3s ease;
       text-decoration: none;
-      display: inline-block;
-      cursor: pointer;
-    }
-
-    .developer-badge:hover {
-      border-color: var(--accent-green);
-      box-shadow: 0 0 20px var(--accent-glow);
-      transform: translateY(-3px) scale(1.02);
-      color: #fff;
+      text-align: center;
     }
 
     .developer-badge strong {
       color: var(--accent-green);
     }
+
+    @media (max-width: 600px) {
+      body {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      .card {
+        padding: 1.1rem;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Three.js Interactive Cybersecurity WebGL Background Canvas -->
   <canvas id="webgl-bg"></canvas>
 
   <div class="container">
     <div class="header">
-      <h1>Student All-in-One Hub</h1>
-      <p>Quick access to all Sairam academic & learning portals</p>
-      <div class="search-wrapper">
+      <h1>Student Hub</h1>
+      <p>Quick access to Sairam learning & academic portals</p>
+    </div>
+
+    <div class="controls-wrapper">
+      <div class="search-box-container">
         <input type="text" id="searchInput" class="search-box" aria-label="Search portals" placeholder=">_ Search platforms..." onkeyup="filterCards()">
+      </div>
+
+      <!-- Quick Filter Chips -->
+      <div class="filter-bar" id="filterBar">
+        <button class="chip active" onclick="setCategory('ALL', this)">All</button>
+        <button class="chip" onclick="setCategory('Academics', this)">Academics</button>
+        <button class="chip" onclick="setCategory('AI Tools', this)">AI Tools</button>
+        <button class="chip" onclick="setCategory('Skill & Coding', this)">Coding</button>
+        <button class="chip" onclick="setCategory('Government', this)">Govt</button>
+        <button class="chip" onclick="setCategory('Learning', this)">Learning</button>
       </div>
     </div>
 
     <div class="grid" id="portalGrid">
 
-      <a href="https://edumate.sairam.edu.in/" target="_blank" class="card" data-title="EDUMATE Sri Sairam Engineering College SEC">
+      <a href="https://edumate.sairam.edu.in/" target="_blank" class="card" data-category="Academics" data-title="EDUMATE Sri Sairam Engineering College SEC">
         <div class="card-glare"></div>
         <div class="card-content">
           <div class="card-top">
@@ -319,7 +369,7 @@
         <div class="card-action">Launch <span>&rarr;</span></div>
       </a> 
 
-      <a href="https://web.nen.wfglobal.org/" target="_blank" class="card" data-title="NEN Wadhwani Foundation Entrepreneurship Network">
+      <a href="https://web.nen.wfglobal.org/" target="_blank" class="card" data-category="Entrepreneurship" data-title="NEN Wadhwani Foundation Entrepreneurship Network">
         <div class="card-glare"></div>
         <div class="card-content">
           <div class="card-top">
@@ -327,12 +377,12 @@
             <img src="https://www.google.com/s2/favicons?domain=nen.wfglobal.org&sz=64" class="card-icon" alt="NEN WFGlobal">
           </div>
           <h3>Wadhwani Portal 🚀</h3>
-          <p>Wadhwani Foundation National Entrepreneurship Network platform for startup support and course tracking.</p>
+          <p>Wadhwani Foundation National Entrepreneurship Network platform for startup support.</p>
         </div>
         <div class="card-action">Launch <span>&rarr;</span></div>
       </a>
 
-      <a href="https://sairam.edu.in" target="_blank" class="card" data-title="Sri Sairam Engineering College SEC Main Site">
+      <a href="https://sairam.edu.in" target="_blank" class="card" data-category="Academics" data-title="Sri Sairam Engineering College SEC Main Site">
         <div class="card-glare"></div>
         <div class="card-content">
           <div class="card-top">
@@ -345,7 +395,7 @@
         <div class="card-action">Launch <span>&rarr;</span></div>
       </a> 
 
-      <a href="https://pgpa.sairam.edu.in/" target="_blank" class="card" data-title="Sairam PGPA Portal Grievance Parent Student Academics SEC">
+      <a href="https://pgpa.sairam.edu.in/" target="_blank" class="card" data-category="Academics" data-title="Sairam PGPA Portal Grievance Parent Student Academics SEC">
         <div class="card-glare"></div>
         <div class="card-content">
           <div class="card-top">
@@ -353,51 +403,51 @@
             <img src="https://www.google.com/s2/favicons?domain=sairam.edu.in&sz=64" class="card-icon" alt="Sairam PGPA">
           </div>
           <h3>Sairam PGPA Portal👾</h3>
-          <p>Official Sairam Grievance Redressal Portal for student and parent institutional feedback.</p>
+          <p>Official Sairam Grievance Redressal Portal for student and parent feedback.</p>
         </div>
         <div class="card-action">Launch <span>&rarr;</span></div>
       </a>
 
-      <a href="https://sailstudent.sairamit.edu.in/" target="_blank" class="card" data-title="AI Powered Learning Sairam SAIL Student Portal Login Edwisely">
+      <a href="https://sailstudent.sairamit.edu.in/" target="_blank" class="card" data-category="AI Tools" data-title="AI Powered Learning Sairam SAIL Student Portal Login Edwisely">
         <div class="card-glare"></div>
         <div class="card-content">
           <div class="card-top">
             <span class="tag">AI Tools</span>
             <img src="https://www.google.com/s2/favicons?domain=sairam.edu.in&sz=64" class="card-icon" alt="SAIL AI">
           </div>
-          <h3>SAIL AI Learning (Student)🕵️‍♀️</h3>
+          <h3>SAIL AI (Student)🕵️‍♀️</h3>
           <p>Sairam AI-driven personalized learning platform for assessments and analytics.</p>
         </div>
         <div class="card-action">Launch <span>&rarr;</span></div>
       </a>
 
-      <a href="https://project.sairamtap.edu.in/" target="_blank" class="card" data-title="Sairam project Login">
+      <a href="https://project.sairamtap.edu.in/" target="_blank" class="card" data-category="AI Tools" data-title="Sairam project Login">
         <div class="card-glare"></div>
         <div class="card-content">
           <div class="card-top">
             <span class="tag">AI Tools</span>
             <img src="https://www.google.com/s2/favicons?domain=sairam.edu.in&sz=64" class="card-icon" alt="sairamproject">
           </div>
-          <h3>Sairam project🤖</h3>
+          <h3>Sairam Project🤖</h3>
           <p>Student project portal for tracking progress, submissions, and reviews.</p>
         </div>
         <div class="card-action">Launch <span>&rarr;</span></div>
       </a>
 
-      <a href="https://sailmentor.sairam.edu.in/" target="_blank" class="card" data-title="SAIL Mentor Sairam AI Powered Learning Faculty Login">
+      <a href="https://sailmentor.sairam.edu.in/" target="_blank" class="card" data-category="AI Tools" data-title="SAIL Mentor Sairam AI Powered Learning Faculty Login">
         <div class="card-glare"></div>
         <div class="card-content">
           <div class="card-top">
             <span class="tag">AI Tools</span>
             <img src="https://www.google.com/s2/favicons?domain=sairam.edu.in&sz=64" class="card-icon" alt="SAIL Mentor">
           </div>
-          <h3>SAIL AI Learning (Mentor)</h3>
+          <h3>SAIL AI (Mentor)</h3>
           <p>Faculty portal for AI-powered student coaching and curriculum management.</p>
         </div>
         <div class="card-action">Launch <span>&rarr;</span></div>
       </a>
 
-      <a href="https://classroom.google.com" target="_blank" class="card" data-title="Google Classroom Learning Academics">
+      <a href="https://classroom.google.com" target="_blank" class="card" data-category="Academics" data-title="Google Classroom Learning Academics">
         <div class="card-glare"></div>
         <div class="card-content">
           <div class="card-top">
@@ -410,7 +460,7 @@
         <div class="card-action">Launch <span>&rarr;</span></div>
       </a>
 
-      <a href="https://www.skillrack.com" target="_blank" class="card" data-title="skillrack.com programming coding">
+      <a href="https://www.skillrack.com" target="_blank" class="card" data-category="Skill & Coding" data-title="skillrack.com programming coding">
         <div class="card-glare"></div>
         <div class="card-content">
           <div class="card-top">
@@ -423,7 +473,7 @@
         <div class="card-action">Launch <span>&rarr;</span></div>
       </a>
 
-      <a href="https://skillrack.gururaja.in/" target="_blank" class="card" data-title="SkillRack Tracker profile stats">
+      <a href="https://skillrack.gururaja.in/" target="_blank" class="card" data-category="Skill & Coding" data-title="SkillRack Tracker profile stats">
         <div class="card-glare"></div>
         <div class="card-content">
           <div class="card-top">
@@ -436,7 +486,7 @@
         <div class="card-action">Launch <span>&rarr;</span></div>
       </a>
 
-      <a href="https://in.linkedin.com" target="_blank" class="card" data-title="LinkedIn India">
+      <a href="https://in.linkedin.com" target="_blank" class="card" data-category="Professional" data-title="LinkedIn India">
         <div class="card-glare"></div>
         <div class="card-content">
           <div class="card-top">
@@ -449,7 +499,7 @@
         <div class="card-action">Launch <span>&rarr;</span></div>
       </a>
 
-      <a href="https://swayam.gov.in" target="_blank" class="card" data-title="Swayam Central NPTEL Courses">
+      <a href="https://swayam.gov.in" target="_blank" class="card" data-category="Learning" data-title="Swayam Central NPTEL Courses">
         <div class="card-glare"></div>
         <div class="card-content">
           <div class="card-top">
@@ -462,7 +512,7 @@
         <div class="card-action">Launch <span>&rarr;</span></div>
       </a>
 
-      <a href="https://www.coursera.org" target="_blank" class="card" data-title="Coursera online learning degrees">
+      <a href="https://www.coursera.org" target="_blank" class="card" data-category="Learning" data-title="Coursera online learning degrees">
         <div class="card-glare"></div>
         <div class="card-content">
           <div class="card-top">
@@ -475,7 +525,7 @@
         <div class="card-action">Launch <span>&rarr;</span></div>
       </a>
 
-      <a href="https://accounts.digitallocker.gov.in/signin/oauth_partner/%2Foauth2%2F1%2Fauthorize" target="_blank" class="card" data-title="DigiLocker Government Digital Documents">
+      <a href="https://accounts.digitallocker.gov.in/signin/oauth_partner/%2Foauth2%2F1%2Fauthorize" target="_blank" class="card" data-category="Government" data-title="DigiLocker Government Digital Documents">
         <div class="card-glare"></div>
         <div class="card-content">
           <div class="card-top">
@@ -488,7 +538,7 @@
         <div class="card-action">Launch <span>&rarr;</span></div>
       </a>
 
-      <a href="https://mybharat.gov.in" target="_blank" class="card" data-title="Home MYBharat youth portal my bharath">
+      <a href="https://mybharat.gov.in" target="_blank" class="card" data-category="Government" data-title="Home MYBharat youth portal my bharath">
         <div class="card-glare"></div>
         <div class="card-content">
           <div class="card-top">
@@ -501,7 +551,7 @@
         <div class="card-action">Launch <span>&rarr;</span></div>
       </a>
 
-      <a href="https://www.mygov.in" target="_blank" class="card" data-title="MyGov.in Citizen Engagement Governance my government">
+      <a href="https://www.mygov.in" target="_blank" class="card" data-category="Government" data-title="MyGov.in Citizen Engagement Governance my government">
         <div class="card-glare"></div>
         <div class="card-content">
           <div class="card-top">
@@ -514,7 +564,7 @@
         <div class="card-action">Launch <span>&rarr;</span></div>
       </a>
 
-      <a href="https://fitindia.gov.in" target="_blank" class="card" data-title="Fit India Movement">
+      <a href="https://fitindia.gov.in" target="_blank" class="card" data-category="Fitness" data-title="Fit India Movement">
         <div class="card-glare"></div>
         <div class="card-content">
           <div class="card-top">
@@ -522,7 +572,7 @@
             <img src="https://www.google.com/s2/favicons?domain=fitindia.gov.in&sz=64" class="card-icon" alt="Fit India">
           </div>
           <h3>Fit India 🏃</h3>
-          <p>Official portal for the Fit India Movement to encourage a healthy and active lifestyle.</p>
+          <p>Official portal for the Fit India Movement to encourage a healthy active lifestyle.</p>
         </div>
         <div class="card-action">Launch <span>&rarr;</span></div>
       </a>
@@ -532,12 +582,29 @@
 
   <footer class="footer">
     <a href="https://balaji-virid.vercel.app/" target="_blank" rel="noopener noreferrer" class="developer-badge">
-      Developed by <strong>BALAJI P</strong> | Cybersecurity Student click for connection
+      Developed by <strong>BALAJI P</strong> | Cybersecurity Student
     </a>
   </footer>
 
   <script>
-    /* --- 1. Search Filter Logic --- */
+    /* --- Mobile Detect & Haptics --- */
+    const isMobile = window.innerWidth < 768;
+    
+    function triggerHaptic() {
+      if ('vibrate' in navigator) navigator.vibrate(12);
+    }
+
+    /* --- Combined Search & Category Filter Logic --- */
+    let currentCategory = 'ALL';
+
+    function setCategory(cat, el) {
+      triggerHaptic();
+      currentCategory = cat;
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      filterCards();
+    }
+
     function filterCards() {
       const query = document.getElementById('searchInput').value.toLowerCase().trim();
       const cards = document.querySelectorAll('.card');
@@ -545,67 +612,76 @@
       cards.forEach(card => {
         const textContent = card.innerText.toLowerCase();
         const dataTitle = (card.getAttribute('data-title') || '').toLowerCase();
-        const isVisible = dataTitle.includes(query) || textContent.includes(query);
-        card.style.display = isVisible ? "flex" : "none";
+        const cardCategory = card.getAttribute('data-category') || '';
+
+        const matchesQuery = dataTitle.includes(query) || textContent.includes(query);
+        const matchesCategory = (currentCategory === 'ALL') || (cardCategory === currentCategory);
+
+        card.style.display = (matchesQuery && matchesCategory) ? "flex" : "none";
       });
     }
 
-    /* --- 2. Advanced Interactive 3D Card Physics --- */
+    /* --- Mobile & Desktop Dynamic 3D Interaction --- */
     document.querySelectorAll('.card').forEach(card => {
       let reqId = null;
 
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        
-        const rotateX = ((y - centerY) / centerY) * -14;
-        const rotateY = ((x - centerX) / centerX) * 14;
+      card.addEventListener('click', () => triggerHaptic());
 
-        card.style.setProperty('--mouse-x', `${x}px`);
-        card.style.setProperty('--mouse-y', `${y}px`);
+      // Only run high-frequency tilt on desktop screens for optimal mobile performance
+      if (!isMobile) {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          
+          const rotateX = ((y - centerY) / centerY) * -10;
+          const rotateY = ((x - centerX) / centerX) * 10;
 
-        if (reqId) cancelAnimationFrame(reqId);
-        reqId = requestAnimationFrame(() => {
-          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(12px)`;
+          card.style.setProperty('--mouse-x', `${x}px`);
+          card.style.setProperty('--mouse-y', `${y}px`);
+
+          if (reqId) cancelAnimationFrame(reqId);
+          reqId = requestAnimationFrame(() => {
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(6px)`;
+          });
         });
-      });
 
-      card.addEventListener('mouseleave', () => {
-        if (reqId) cancelAnimationFrame(reqId);
-        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)`;
-      });
+        card.addEventListener('mouseleave', () => {
+          if (reqId) cancelAnimationFrame(reqId);
+          card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)`;
+        });
+      }
     });
 
-    /* --- 3. Three.js Cybersecurity 3D WebGL Background Engine --- */
+    /* --- Three.js Mobile-Optimized Background Engine --- */
     const canvas = document.getElementById('webgl-bg');
     const scene = new THREE.Scene();
 
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 32;
+    camera.position.z = isMobile ? 42 : 32;
 
-    const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: !isMobile });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
 
-    /* --- CYBER ELEMENT 1: SOC Dynamic Plexus Network Grid --- */
-    const nodeCount = window.innerWidth < 768 ? 45 : 80;
-    const maxDistance = 14;
+    /* Dynamic Node Count based on hardware power */
+    const nodeCount = isMobile ? 30 : 75;
+    const maxDistance = isMobile ? 11 : 14;
     const nodePositions = new Float32Array(nodeCount * 3);
     const nodeVelocities = [];
 
     for (let i = 0; i < nodeCount; i++) {
-      nodePositions[i * 3] = (Math.random() - 0.5) * 70;
-      nodePositions[i * 3 + 1] = (Math.random() - 0.5) * 70;
-      nodePositions[i * 3 + 2] = (Math.random() - 0.5) * 50;
+      nodePositions[i * 3] = (Math.random() - 0.5) * (isMobile ? 50 : 70);
+      nodePositions[i * 3 + 1] = (Math.random() - 0.5) * (isMobile ? 50 : 70);
+      nodePositions[i * 3 + 2] = (Math.random() - 0.5) * 40;
 
       nodeVelocities.push({
-        x: (Math.random() - 0.5) * 0.04,
-        y: (Math.random() - 0.5) * 0.04,
-        z: (Math.random() - 0.5) * 0.04
+        x: (Math.random() - 0.5) * 0.03,
+        y: (Math.random() - 0.5) * 0.03,
+        z: (Math.random() - 0.5) * 0.03
       });
     }
 
@@ -614,179 +690,81 @@
 
     const nodeMat = new THREE.PointsMaterial({
       color: 0x10b981,
-      size: 0.5,
+      size: isMobile ? 0.6 : 0.5,
       transparent: true,
-      opacity: 0.8
+      opacity: 0.75
     });
 
     const plexusNodes = new THREE.Points(nodeGeo, nodeMat);
     scene.add(plexusNodes);
 
-    // Dynamic Connection Lines for Network Topology
     const linesGeo = new THREE.BufferGeometry();
     const linesMat = new THREE.LineBasicMaterial({
       color: 0x38bdf8,
       transparent: true,
-      opacity: 0.25,
+      opacity: 0.2,
       blending: THREE.AdditiveBlending
     });
     const linesMesh = new THREE.LineSegments(linesGeo, linesMat);
     scene.add(linesMesh);
 
-    /* --- CYBER ELEMENT 2: Holographic 3D Firewall / Cyber Shield --- */
+    /* Cyber Shield Object */
     function createCyberShield() {
       const shieldGroup = new THREE.Group();
+      const outerGeo = new THREE.IcosahedronGeometry(isMobile ? 3.8 : 5.5, 1);
+      const outerMat = new THREE.MeshBasicMaterial({ color: 0x10b981, wireframe: true, transparent: true, opacity: 0.2 });
+      shieldGroup.add(new THREE.Mesh(outerGeo, outerMat));
 
-      // Geodesic Forcefield Dome
-      const outerGeo = new THREE.IcosahedronGeometry(5.5, 2);
-      const outerMat = new THREE.MeshBasicMaterial({
-        color: 0x10b981,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.28
-      });
-      const outerDome = new THREE.Mesh(outerGeo, outerMat);
-      shieldGroup.add(outerDome);
-
-      // Inner Core Crypto Octahedron
-      const coreGeo = new THREE.OctahedronGeometry(2.8, 0);
-      const coreMat = new THREE.MeshBasicMaterial({
-        color: 0x00f0ff,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.7
-      });
+      const coreGeo = new THREE.OctahedronGeometry(isMobile ? 1.8 : 2.8, 0);
+      const coreMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, wireframe: true, transparent: true, opacity: 0.6 });
       const core = new THREE.Mesh(coreGeo, coreMat);
       shieldGroup.add(core);
 
-      // Defense Orbiting Encryption Ring 1
-      const ring1Geo = new THREE.TorusGeometry(7, 0.06, 16, 100);
-      const ring1Mat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, wireframe: true, transparent: true, opacity: 0.5 });
-      const ring1 = new THREE.Mesh(ring1Geo, ring1Mat);
-      ring1.rotation.x = Math.PI / 3;
-      shieldGroup.add(ring1);
-
-      // Defense Orbiting Encryption Ring 2
-      const ring2Geo = new THREE.TorusGeometry(8.2, 0.04, 16, 100);
-      const ring2Mat = new THREE.MeshBasicMaterial({ color: 0x10b981, transparent: true, opacity: 0.4 });
-      const ring2 = new THREE.Mesh(ring2Geo, ring2Mat);
-      ring2.rotation.y = Math.PI / 4;
-      shieldGroup.add(ring2);
-
-      return { group: shieldGroup, core, ring1, ring2 };
+      return { group: shieldGroup, core };
     }
 
     const cyberShield = createCyberShield();
-    cyberShield.group.position.set(-22, 8, -10);
+    cyberShield.group.position.set(isMobile ? 0 : -22, isMobile ? 18 : 8, -15);
     scene.add(cyberShield.group);
 
-    /* --- CYBER ELEMENT 3: 3D Digital Encryption Padlock --- */
-    function createCyberLock() {
-      const lockGroup = new THREE.Group();
+    // Parallax tracking variables
+    let targetMouseX = 0, targetMouseY = 0;
+    let currentMouseX = 0, currentMouseY = 0;
 
-      // Padlock Base Body
-      const bodyGeo = new THREE.BoxGeometry(3.2, 2.8, 1.2);
-      const bodyMat = new THREE.MeshBasicMaterial({
-        color: 0x38bdf8,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.6
-      });
-      const body = new THREE.Mesh(bodyGeo, bodyMat);
-      lockGroup.add(body);
-
-      // Padlock Shackle Loop
-      const shackleGeo = new THREE.TorusGeometry(1.3, 0.22, 16, 32, Math.PI);
-      const shackleMat = new THREE.MeshBasicMaterial({ color: 0x10b981, wireframe: true });
-      const shackle = new THREE.Mesh(shackleGeo, shackleMat);
-      shackle.position.set(0, 1.4, 0);
-      lockGroup.add(shackle);
-
-      // Keyhole Core Node
-      const keyholeGeo = new THREE.CylinderGeometry(0.35, 0.1, 0.5, 12);
-      const keyholeMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff });
-      const keyhole = new THREE.Mesh(keyholeGeo, keyholeMat);
-      keyhole.rotation.x = Math.PI / 2;
-      keyhole.position.z = 0.5;
-      lockGroup.add(keyhole);
-
-      // Outer Rotating Cipher Ring
-      const cipherGeo = new THREE.TorusGeometry(4.5, 0.05, 12, 60);
-      const cipherMat = new THREE.MeshBasicMaterial({ color: 0x818cf8, wireframe: true, transparent: true, opacity: 0.5 });
-      const cipherRing = new THREE.Mesh(cipherGeo, cipherMat);
-      lockGroup.add(cipherRing);
-
-      return { group: lockGroup, cipherRing, body };
-    }
-
-    const cyberLock = createCyberLock();
-    cyberLock.group.position.set(22, -10, -8);
-    scene.add(cyberLock.group);
-
-    /* --- CYBER ELEMENT 4: Threat Detection Ping Nodes (Red Alerts) --- */
-    const threatGroup = new THREE.Group();
-    const threatGeo = new THREE.SphereGeometry(0.4, 8, 8);
-    const threatMat = new THREE.MeshBasicMaterial({ color: 0xef4444, wireframe: true });
-
-    const threatNodes = [];
-    for (let i = 0; i < 4; i++) {
-      const threat = new THREE.Mesh(threatGeo, threatMat);
-      threat.position.set(
-        (Math.random() - 0.5) * 40,
-        (Math.random() - 0.5) * 30,
-        (Math.random() - 0.5) * 20
-      );
-      threatGroup.add(threat);
-      threatNodes.push(threat);
-    }
-    scene.add(threatGroup);
-
-    // Mouse Movement Parallax Tracking
-    let targetMouseX = 0;
-    let targetMouseY = 0;
-    let currentMouseX = 0;
-    let currentMouseY = 0;
-
-    window.addEventListener('mousemove', (event) => {
-      targetMouseX = (event.clientX / window.innerWidth - 0.5) * 2;
-      targetMouseY = (event.clientY / window.innerHeight - 0.5) * 2;
+    window.addEventListener(isMobile ? 'touchmove' : 'mousemove', (e) => {
+      const x = e.touches ? e.touches[0].clientX : e.clientX;
+      const y = e.touches ? e.touches[0].clientY : e.clientY;
+      targetMouseX = (x / window.innerWidth - 0.5) * 2;
+      targetMouseY = (y / window.innerHeight - 0.5) * 2;
     });
 
-    // Window Resize Handler
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
-    // Render Loop
     const clock = new THREE.Clock();
 
     function animate() {
       requestAnimationFrame(animate);
-
       const elapsedTime = clock.getElapsedTime();
 
-      // Smooth mouse interpolation (lerp)
-      currentMouseX += (targetMouseX - currentMouseX) * 0.05;
-      currentMouseY += (targetMouseY - currentMouseY) * 0.05;
+      currentMouseX += (targetMouseX - currentMouseX) * 0.04;
+      currentMouseY += (targetMouseY - currentMouseY) * 0.04;
 
-      /* --- 1. Update Plexus Network Topology --- */
       const posAttr = nodeGeo.attributes.position;
       const linePositions = [];
 
       for (let i = 0; i < nodeCount; i++) {
-        // Move nodes
         posAttr.setX(i, posAttr.getX(i) + nodeVelocities[i].x);
         posAttr.setY(i, posAttr.getY(i) + nodeVelocities[i].y);
         posAttr.setZ(i, posAttr.getZ(i) + nodeVelocities[i].z);
 
-        // Bounce back inside boundaries
-        if (Math.abs(posAttr.getX(i)) > 35) nodeVelocities[i].x *= -1;
-        if (Math.abs(posAttr.getY(i)) > 35) nodeVelocities[i].y *= -1;
-        if (Math.abs(posAttr.getZ(i)) > 25) nodeVelocities[i].z *= -1;
+        if (Math.abs(posAttr.getX(i)) > 30) nodeVelocities[i].x *= -1;
+        if (Math.abs(posAttr.getY(i)) > 30) nodeVelocities[i].y *= -1;
+        if (Math.abs(posAttr.getZ(i)) > 20) nodeVelocities[i].z *= -1;
 
-        // Draw connections between nearby nodes
         for (let j = i + 1; j < nodeCount; j++) {
           const dx = posAttr.getX(i) - posAttr.getX(j);
           const dy = posAttr.getY(i) - posAttr.getY(j);
@@ -802,30 +780,13 @@
         }
       }
       posAttr.needsUpdate = true;
-
       linesGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
 
-      /* --- 2. Rotate Cyber Shield Hologram --- */
       cyberShield.group.rotation.y = elapsedTime * 0.2;
-      cyberShield.core.rotation.x = elapsedTime * 0.5;
-      cyberShield.core.rotation.y = elapsedTime * 0.7;
-      cyberShield.ring1.rotation.z = elapsedTime * 0.4;
-      cyberShield.ring2.rotation.x = -elapsedTime * 0.3;
+      cyberShield.core.rotation.x = elapsedTime * 0.4;
 
-      /* --- 3. Rotate Cyber Padlock & Cipher Ring --- */
-      cyberLock.group.position.y = -10 + Math.sin(elapsedTime * 1.2) * 0.7;
-      cyberLock.cipherRing.rotation.x = elapsedTime * 0.8;
-      cyberLock.cipherRing.rotation.y = elapsedTime * 0.5;
-      cyberLock.body.rotation.y = Math.sin(elapsedTime * 0.6) * 0.3;
-
-      /* --- 4. Animate Threat Detection Pings --- */
-      threatNodes.forEach((threat, idx) => {
-        threat.scale.setScalar(1 + Math.sin(elapsedTime * 4 + idx) * 0.3);
-      });
-
-      // Camera Parallax Movement
-      camera.position.x = currentMouseX * 4;
-      camera.position.y = -currentMouseY * 4;
+      camera.position.x = currentMouseX * 2;
+      camera.position.y = -currentMouseY * 2;
       camera.lookAt(scene.position);
 
       renderer.render(scene, camera);
