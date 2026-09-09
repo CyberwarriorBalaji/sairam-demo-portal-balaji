@@ -3,22 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AURA — Next-Gen 3D Web</title>
+  <title>Sairam Student All-in-One Hub 3D</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   
   <style>
-    /* --- CSS RESET & VARIABLES --- */
     :root {
-      --bg-color: #060709;
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
-      --accent-cyan: #00f0ff;
-      --accent-pink: #ff007f;
-      --glass-bg: rgba(255, 255, 255, 0.03);
-      --glass-border: rgba(255, 255, 255, 0.1);
-      --glass-blur: blur(16px);
+      --bg-color: #05070f;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --sairam-gold: #fbbf24;
+      --sairam-blue: #00f0ff;
+      --glass-bg: rgba(15, 23, 42, 0.45);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-blur: blur(20px);
     }
 
     * {
@@ -39,7 +38,7 @@
       overflow-x: hidden;
     }
 
-    /* --- 3D CANVAS BACKGROUND --- */
+    /* 3D WebGL Canvas Layer */
     #webgl {
       position: fixed;
       top: 0;
@@ -50,14 +49,14 @@
       pointer-events: none;
     }
 
-    /* --- UI OVERLAY LAYER --- */
+    /* UI Content Overlay */
     .content-wrapper {
       position: relative;
       z-index: 1;
       width: 100%;
     }
 
-    /* --- NAVIGATION --- */
+    /* Header & Navigation */
     nav {
       position: fixed;
       top: 0;
@@ -66,196 +65,243 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.5rem 4rem;
+      padding: 1.2rem 4rem;
       z-index: 100;
-      background: rgba(6, 7, 9, 0.6);
-      backdrop-filter: blur(12px);
+      background: rgba(5, 7, 15, 0.7);
+      backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--glass-border);
     }
 
-    .logo {
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--sairam-gold), #f59e0b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-weight: 800;
-      font-size: 1.4rem;
-      letter-spacing: 2px;
-      background: linear-gradient(135deg, #fff 0%, var(--accent-cyan) 100%);
+      color: #000;
+      font-size: 1.1rem;
+    }
+
+    .brand-title {
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, #ffffff 0%, var(--sairam-gold) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .nav-links {
       display: flex;
-      gap: 2.5rem;
+      gap: 2rem;
       list-style: none;
     }
 
     .nav-links a {
       color: var(--text-muted);
       text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: 400;
+      font-size: 0.9rem;
+      font-weight: 500;
       transition: color 0.3s ease;
     }
 
     .nav-links a:hover {
-      color: var(--accent-cyan);
+      color: var(--sairam-blue);
     }
 
-    .cta-button {
-      padding: 0.75rem 1.75rem;
-      border-radius: 30px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: var(--text-main);
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      backdrop-filter: blur(10px);
-      transition: all 0.3s ease;
-    }
-
-    .cta-button:hover {
-      background: var(--text-main);
-      color: var(--bg-color);
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-    }
-
-    /* --- HERO SECTION --- */
-    .hero {
-      min-height: 100vh;
+    .user-pill {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 0 10%;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .hero-tag {
-      display: inline-block;
-      padding: 0.4rem 1rem;
-      border-radius: 20px;
+      align-items: center;
+      gap: 10px;
+      padding: 0.5rem 1.2rem;
+      border-radius: 30px;
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
       backdrop-filter: var(--glass-blur);
-      font-size: 0.85rem;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--accent-cyan);
-      margin-bottom: 1.5rem;
     }
 
-    .hero h1 {
-      font-size: clamp(2.5rem, 6vw, 5rem);
-      font-weight: 800;
-      line-height: 1.1;
-      margin-bottom: 1.5rem;
+    .user-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--sairam-blue);
     }
 
-    .hero p {
-      font-size: 1.15rem;
-      color: var(--text-muted);
-      max-width: 500px;
-      line-height: 1.6;
-      margin-bottom: 2.5rem;
-    }
-
-    .btn-group {
+    /* Hero Dashboard Section */
+    .hero {
+      min-height: 100vh;
       display: flex;
-      gap: 1.5rem;
-    }
-
-    .btn-primary {
-      padding: 1rem 2.25rem;
-      border-radius: 30px;
-      background: linear-gradient(135deg, var(--accent-cyan), #0072ff);
-      color: #000;
-      font-weight: 600;
-      text-decoration: none;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(0, 240, 255, 0.4);
-    }
-
-    /* --- FEATURES SECTION --- */
-    .features {
-      padding: 8rem 10%;
+      align-items: center;
+      padding: 8rem 8% 4rem 8%;
       max-width: 1400px;
       margin: 0 auto;
     }
 
-    .section-title {
-      font-size: 2.25rem;
+    .hero-content {
+      max-width: 600px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--sairam-blue);
+      margin-bottom: 1.5rem;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--sairam-blue);
+      box-shadow: 0 0 10px var(--sairam-blue);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
       font-weight: 800;
-      margin-bottom: 3.5rem;
+      line-height: 1.1;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 2.5rem;
+    }
+
+    .quick-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .stat-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: var(--glass-blur);
+      padding: 1.25rem;
+      border-radius: 18px;
+    }
+
+    .stat-card .number {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--sairam-gold);
+    }
+
+    .stat-card .label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Academic Hub Modules Section */
+    .hub-grid-section {
+      padding: 4rem 8% 8rem 8%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-header {
       text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-header h2 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-header p {
+      color: var(--text-muted);
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 2rem;
     }
 
-    .card {
+    .hub-card {
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
       backdrop-filter: var(--glass-blur);
       border-radius: 24px;
-      padding: 2.5rem;
-      transition: transform 0.3s ease, border-color 0.3s ease;
+      padding: 2.2rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
     }
 
-    .card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(0, 240, 255, 0.4);
+    .hub-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(251, 191, 36, 0.4);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
     }
 
-    .card-icon {
-      width: 50px;
-      height: 50px;
-      border-radius: 14px;
+    .hub-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
       background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 1.4rem;
       margin-bottom: 1.5rem;
-      color: var(--accent-cyan);
+    }
+
+    .hub-card h3 {
       font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
     }
 
-    .card h3 {
-      font-size: 1.3rem;
-      font-weight: 600;
-      margin-bottom: 0.75rem;
-    }
-
-    .card p {
+    .hub-card p {
       color: var(--text-muted);
+      font-size: 0.92rem;
       line-height: 1.6;
-      font-size: 0.95rem;
     }
 
-    /* --- FOOTER --- */
+    /* Footer */
     footer {
       border-top: 1px solid var(--glass-border);
-      padding: 3rem 10%;
+      padding: 2.5rem 8%;
       text-align: center;
       color: var(--text-muted);
-      font-size: 0.9rem;
-      background: rgba(6, 7, 9, 0.8);
-      backdrop-filter: blur(10px);
+      font-size: 0.88rem;
+      background: rgba(5, 7, 15, 0.8);
+      backdrop-filter: blur(12px);
     }
 
-    /* --- RESPONSIVE MOBILE ADJUSTMENTS --- */
     @media (max-width: 768px) {
-      nav { padding: 1.25rem 2rem; }
+      nav { padding: 1rem 1.5rem; }
       .nav-links { display: none; }
-      .hero { padding: 0 2rem; }
-      .features { padding: 5rem 2rem; }
+      .hero { padding: 6rem 1.5rem 2rem 1.5rem; }
+      .hub-grid-section { padding: 2rem 1.5rem 4rem 1.5rem; }
     }
   </style>
 
@@ -263,59 +309,102 @@
 </head>
 <body>
 
-  <!-- 3D BACKGROUND CANVAS -->
+  <!-- 3D WebGL Canvas Backdrop -->
   <canvas id="webgl"></canvas>
 
-  <!-- OVERLAY UI CONTENT -->
+  <!-- Interactive UI Overlay -->
   <div class="content-wrapper">
     <nav>
-      <div class="logo">AURA</div>
+      <div class="brand">
+        <div class="logo-badge">S</div>
+        <span class="brand-title">SAIRAM HUB</span>
+      </div>
       <ul class="nav-links">
-        <li><a href="#hero">Overview</a></li>
-        <li><a href="#features">Engine</a></li>
-        <li><a href="#showcase">Specs</a></li>
+        <li><a href="#dashboard">Dashboard</a></li>
+        <li><a href="#academics">Academics</a></li>
+        <li><a href="#resources">Resources</a></li>
+        <li><a href="#events">Campus Life</a></li>
       </ul>
-      <button class="cta-button">Launch App</button>
+      <div class="user-pill">
+        <div class="user-avatar"></div>
+        <span style="font-size: 0.85rem; font-weight: 600;">SEC Student</span>
+      </div>
     </nav>
 
-    <section class="hero" id="hero">
-      <span class="hero-tag">Real-time WebGL Engine</span>
-      <h1>Spatial Design <br>Redefined.</h1>
-      <p>Elevating web interfaces with physically based optical glass refraction, dynamic lighting, and fluid spatial interactions.</p>
-      <div class="btn-group">
-        <a href="#features" class="btn-primary">Explore Platform</a>
+    <section class="hero" id="dashboard">
+      <div class="hero-content">
+        <div class="status-badge">
+          <span class="status-dot"></span> SAIL AI Portal Connected
+        </div>
+        <h1>Student All-in-One <br>3D Workspace</h1>
+        <p>Access attendance trackers, exam schedules, course materials, and real-time academic performance in an immersive spatial UI.</p>
+        
+        <div class="quick-stats">
+          <div class="stat-card">
+            <div class="number">94.2%</div>
+            <div class="label">Overall Attendance</div>
+          </div>
+          <div class="stat-card">
+            <div class="number">8.95</div>
+            <div class="label">Current CGPA</div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="features" id="features">
-      <h2 class="section-title">Engine Core Architecture</h2>
+    <section class="hub-grid-section" id="academics">
+      <div class="section-header">
+        <h2>Academic Hub Modules</h2>
+        <p>Centralized tools designed for Sairam Institutions students.</p>
+      </div>
+
       <div class="grid">
-        <div class="card">
-          <div class="card-icon">01</div>
-          <h3>Optical Transmission</h3>
-          <p>Real-time glass refraction calculated via index-of-refraction math, casting light realistically across geometry.</p>
+        <div class="hub-card">
+          <div class="hub-icon">🎓</div>
+          <h3>Academic Performance</h3>
+          <p>Track internal marks, semester grades, and CGPA trends with interactive analytics.</p>
         </div>
-        <div class="card">
-          <div class="card-icon">02</div>
-          <h3>Inertial Lerp Physics</h3>
-          <p>Smooth cursor-tracking mechanics utilizing linear interpolation to provide weighted, tactile feedback.</p>
+
+        <div class="hub-card">
+          <div class="hub-icon">📅</div>
+          <h3>Smart Attendance</h3>
+          <p>Real-time subject-wise percentage updates and leave application request tools.</p>
         </div>
-        <div class="card">
-          <div class="card-icon">03</div>
-          <h3>Scroll State Engine</h3>
-          <p>Seamlessly binds 3D viewport spatial coordinates directly to modern CSS scroll timelines.</p>
+
+        <div class="hub-card">
+          <div class="hub-icon">📚</div>
+          <h3>Digital Library & Notes</h3>
+          <p>Instant access to lecture slides, lab manuals, and previous year question papers.</p>
+        </div>
+
+        <div class="hub-card">
+          <div class="hub-icon">⚡</div>
+          <h3>SAIL AI Companion</h3>
+          <p>Personalized learning pathways and automated daily question-of-the-day (QOD) drills.</p>
+        </div>
+
+        <div class="hub-card">
+          <div class="hub-icon">🏆</div>
+          <h3>Innovation Centre</h3>
+          <p>Register for hackathons, project exhibitions, and patents via Sri Leo Muthu Innovation Lab.</p>
+        </div>
+
+        <div class="hub-card">
+          <div class="hub-icon">💼</div>
+          <h3>Placement Portal</h3>
+          <p>Skill assessments, mock interview schedules, and active campus drive alerts.</p>
         </div>
       </div>
     </section>
 
     <footer>
-      <p>&copy; 2026 AURA Interactive Technologies. Built with Three.js & Modern Web Standards.</p>
+      <p>&copy; 2026 Sairam Group of Institutions — All-in-One Student Portal</p>
     </footer>
   </div>
 
-  <!-- THREE.JS LOGIC -->
+  <!-- THREE.JS 3D GRAPHICS LOGIC -->
   <script>
-    // --- 1. SETUP ENGINE & SCENE ---
+    // 1. Scene & Renderer Setup
     const canvas = document.querySelector('#webgl');
     const scene = new THREE.Scene();
 
@@ -325,7 +414,7 @@
     };
 
     const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
-    camera.position.z = 4.5;
+    camera.position.z = 5;
     scene.add(camera);
 
     const renderer = new THREE.WebGLRenderer({
@@ -336,65 +425,58 @@
     renderer.setSize(sizes.width, sizes.height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // --- 2. LIGHTING PIPELINE ---
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+    // 2. Dynamic Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
     scene.add(ambientLight);
 
-    const mainLight = new THREE.DirectionalLight(0xffffff, 2);
-    mainLight.position.set(5, 5, 5);
-    scene.add(mainLight);
+    const goldLight = new THREE.PointLight(0xfbbf24, 5, 12);
+    goldLight.position.set(4, 3, 2);
+    scene.add(goldLight);
 
-    // Dynamic Colored Rim Lights
-    const cyanLight = new THREE.PointLight(0x00f0ff, 6, 12);
-    cyanLight.position.set(-3, -1, 1);
+    const cyanLight = new THREE.PointLight(0x00f0ff, 5, 12);
+    cyanLight.position.set(-4, -2, 2);
     scene.add(cyanLight);
 
-    const pinkLight = new THREE.PointLight(0xff007f, 6, 12);
-    pinkLight.position.set(3, 2, 1);
-    scene.add(pinkLight);
-
-    // --- 3. BACKGROUND GEOMETRY (Refraction targets) ---
-    const bgGroup = new THREE.Group();
-    const icoGeo = new THREE.IcosahedronGeometry(0.6, 0);
-    const wireMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, wireframe: true });
-    const wireMat2 = new THREE.MeshBasicMaterial({ color: 0xff007f, wireframe: true });
-
-    const mesh1 = new THREE.Mesh(icoGeo, wireMat);
-    mesh1.position.set(-2.2, 1.2, -1.5);
-    
-    const mesh2 = new THREE.Mesh(icoGeo, wireMat2);
-    mesh2.position.set(2.2, -1.2, -1.5);
-
-    bgGroup.add(mesh1, mesh2);
-    scene.add(bgGroup);
-
-    // --- 4. MAIN FROSTED GLASS OBJECT ---
-    const mainGeometry = new THREE.TorusKnotGeometry(1, 0.35, 128, 32);
+    // 3. Frosted Glass Central Object (Torus Knot Hub Core)
+    const geometry = new THREE.TorusKnotGeometry(1.1, 0.36, 128, 32);
     const glassMaterial = new THREE.MeshPhysicalMaterial({
       color: 0xffffff,
-      metalness: 0.05,
-      roughness: 0.15,      // Frosted texture control
-      transmission: 0.92,   // Light refraction
-      ior: 1.5,            // Refraction index
-      thickness: 1.8,       // Light absorption depth
+      metalness: 0.1,
+      roughness: 0.18,      // Frosted refraction texture
+      transmission: 0.95,   // Glass optical transparency
+      ior: 1.5,            // Index of refraction
+      thickness: 1.6,
       clearcoat: 1.0,
       clearcoatRoughness: 0.1,
       transparent: true
     });
 
-    const glassMesh = new THREE.Mesh(mainGeometry, glassMaterial);
-    
-    // Offset object slightly to match layout hierarchy
-    glassMesh.position.x = 1.2; 
-    scene.add(glassMesh);
+    const mainCore = new THREE.Mesh(geometry, glassMaterial);
+    mainCore.position.x = 1.4; // Align with desktop text layout
+    scene.add(mainCore);
 
-    // Mobile layout adjustment
+    // Orbiting Geometric Satellites
+    const orbitGroup = new THREE.Group();
+    const icoGeo = new THREE.IcosahedronGeometry(0.35, 0);
+    const wireMatGold = new THREE.MeshBasicMaterial({ color: 0xfbbf24, wireframe: true });
+    const wireMatCyan = new THREE.MeshBasicMaterial({ color: 0x00f0ff, wireframe: true });
+
+    const sat1 = new THREE.Mesh(icoGeo, wireMatGold);
+    sat1.position.set(-2.2, 1.5, -1);
+
+    const sat2 = new THREE.Mesh(icoGeo, wireMatCyan);
+    sat2.position.set(2.2, -1.8, -1);
+
+    orbitGroup.add(sat1, sat2);
+    scene.add(orbitGroup);
+
+    // Layout responsiveness for mobile devices
     if (window.innerWidth < 768) {
-      glassMesh.position.x = 0;
-      glassMesh.position.y = 0.5;
+      mainCore.position.x = 0;
+      mainCore.position.y = 1.0;
     }
 
-    // --- 5. INTERACTION LOGIC (MOUSE + SCROLL) ---
+    // 4. Smooth Mouse Interaction (Lerp Physics)
     const targetRotation = { x: 0, y: 0 };
     let scrollY = 0;
 
@@ -402,8 +484,8 @@
       const mouseX = (e.clientX / sizes.width) * 2 - 1;
       const mouseY = -(e.clientY / sizes.height) * 2 + 1;
 
-      targetRotation.x = mouseY * 0.6;
-      targetRotation.y = mouseX * 0.6;
+      targetRotation.x = mouseY * 0.5;
+      targetRotation.y = mouseX * 0.5;
     });
 
     window.addEventListener('scroll', () => {
@@ -420,44 +502,43 @@
       renderer.setSize(sizes.width, sizes.height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-      // Mobile check adjustment on resize
       if (window.innerWidth < 768) {
-        glassMesh.position.x = 0;
-        glassMesh.position.y = 0.5;
+        mainCore.position.x = 0;
+        mainCore.position.y = 1.0;
       } else {
-        glassMesh.position.x = 1.2;
-        glassMesh.position.y = 0;
+        mainCore.position.x = 1.4;
+        mainCore.position.y = 0;
       }
     });
 
-    // --- 6. TICK ANIMATION LOOP ---
+    // 5. Animation Loop
     const clock = new THREE.Clock();
 
-    const animate = () => {
+    const tick = () => {
       const elapsedTime = clock.getElapsedTime();
 
-      // Fluid inertia smoothing (Lerp)
-      glassMesh.rotation.x += (targetRotation.x - glassMesh.rotation.x) * 0.05;
-      glassMesh.rotation.y += (targetRotation.y - glassMesh.rotation.y) * 0.05;
+      // Inertial movement easing
+      mainCore.rotation.x += (targetRotation.x - mainCore.rotation.x) * 0.05;
+      mainCore.rotation.y += (targetRotation.y - mainCore.rotation.y) * 0.05;
 
-      // Continuous rotation idle state
-      glassMesh.rotation.z = elapsedTime * 0.15;
+      // Continuous rotation
+      mainCore.rotation.z = elapsedTime * 0.12;
 
-      // Integrate page scroll depth into camera/mesh transform
-      glassMesh.position.y = (scrollY * 0.001) + (window.innerWidth < 768 ? 0.5 : 0);
-      camera.position.z = 4.5 + (scrollY * 0.0015);
+      // Scroll-linked position movement
+      mainCore.position.y = (scrollY * 0.0012) + (window.innerWidth < 768 ? 1.0 : 0);
+      camera.position.z = 5 + (scrollY * 0.001);
 
-      // Animate ambient background shapes
-      mesh1.rotation.x = elapsedTime * 0.3;
-      mesh1.rotation.y = elapsedTime * 0.4;
-      mesh2.rotation.x = -elapsedTime * 0.3;
-      mesh2.rotation.y = -elapsedTime * 0.4;
+      // Rotate orbital background shapes
+      sat1.rotation.x = elapsedTime * 0.4;
+      sat1.rotation.y = elapsedTime * 0.6;
+      sat2.rotation.x = -elapsedTime * 0.4;
+      sat2.rotation.y = -elapsedTime * 0.6;
 
       renderer.render(scene, camera);
-      requestAnimationFrame(animate);
+      requestAnimationFrame(tick);
     };
 
-    animate();
+    tick();
   </script>
 </body>
 </html>
