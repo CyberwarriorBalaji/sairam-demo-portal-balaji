@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sairam Student Portal Hub 3D</title>
+  <title>Sairam Student Portal Hub - 3D Cosmic Space</title>
 
   <!-- Google Search & Standard Browser Favicons -->
   <link rel="icon" type="image/png" sizes="32x32" href="https://www.google.com/s2/favicons?domain=sairam.edu.in&sz=64">
@@ -21,13 +21,13 @@
 
   <style>
     :root {
-      --bg-dark: #030712;
-      --card-bg: rgba(15, 23, 42, 0.55);
-      --card-border: rgba(56, 189, 248, 0.18);
-      --card-border-hover: rgba(56, 189, 248, 0.75);
+      --bg-dark: #02040a;
+      --card-bg: rgba(8, 14, 28, 0.6);
+      --card-border: rgba(56, 189, 248, 0.22);
+      --card-border-hover: rgba(147, 51, 234, 0.8);
       --accent: #38bdf8;
-      --accent-purple: #818cf8;
-      --accent-glow: rgba(56, 189, 248, 0.35);
+      --accent-purple: #c084fc;
+      --accent-glow: rgba(56, 189, 248, 0.4);
       --text: #f8fafc;
       --text-sub: #94a3b8;
     }
@@ -79,11 +79,11 @@
       font-weight: 800;
       letter-spacing: -0.02em;
       text-transform: uppercase;
-      background: linear-gradient(135deg, #ffffff 20%, var(--accent) 70%, var(--accent-purple) 100%);
+      background: linear-gradient(135deg, #ffffff 20%, var(--accent) 60%, var(--accent-purple) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 0.75rem;
-      text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      text-shadow: 0 10px 30px rgba(0,0,0,0.8);
     }
 
     .header p {
@@ -104,7 +104,7 @@
       padding: 1rem 1.5rem;
       border-radius: 30px;
       border: 1px solid var(--card-border);
-      background: rgba(15, 23, 42, 0.65);
+      background: rgba(8, 14, 28, 0.7);
       color: var(--text);
       font-size: 1rem;
       font-family: inherit;
@@ -112,12 +112,12 @@
       -webkit-backdrop-filter: blur(16px);
       outline: none;
       transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.15);
     }
 
     .search-box:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 25px var(--accent-glow), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 30px var(--accent-glow), inset 0 1px 1px rgba(255, 255, 255, 0.25);
       transform: translateY(-2px) scale(1.01);
     }
 
@@ -144,7 +144,7 @@
       overflow: hidden;
       transform-style: preserve-3d;
       transition: border-color 0.4s ease, box-shadow 0.4s ease;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
       will-change: transform;
     }
 
@@ -156,14 +156,14 @@
       width: 100%;
       height: 100%;
       pointer-events: none;
-      background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.12), transparent 40%);
+      background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.15), transparent 40%);
       border-radius: inherit;
       z-index: 2;
     }
 
     .card:hover {
-      border-color: var(--card-border-hover);
-      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 0 30px var(--accent-glow);
+      border-color: var(--accent-purple);
+      box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.8), 0 0 35px rgba(192, 132, 252, 0.3);
     }
 
     .card-content {
@@ -190,7 +190,7 @@
       padding: 0.3rem 0.75rem;
       border-radius: 30px;
       border: 1px solid rgba(56, 189, 248, 0.25);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
     .card-icon {
@@ -200,8 +200,8 @@
       object-fit: contain;
       background: rgba(255, 255, 255, 0.08);
       padding: 5px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.4);
       transform: translateZ(35px);
       transition: transform 0.3s ease;
     }
@@ -262,13 +262,13 @@
     .developer-badge {
       font-size: 0.85rem;
       color: var(--text-sub);
-      background: rgba(15, 23, 42, 0.7);
+      background: rgba(8, 14, 28, 0.8);
       border: 1px solid var(--card-border);
       padding: 0.6rem 1.4rem;
       border-radius: 30px;
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
       transition: all 0.3s ease;
       text-decoration: none;
       display: inline-block;
@@ -276,8 +276,8 @@
     }
 
     .developer-badge:hover {
-      border-color: var(--accent);
-      box-shadow: 0 0 20px var(--accent-glow);
+      border-color: var(--accent-purple);
+      box-shadow: 0 0 25px rgba(192, 132, 252, 0.4);
       transform: translateY(-3px) scale(1.02);
       color: #fff;
     }
@@ -289,7 +289,7 @@
 </head>
 <body>
 
-  <!-- Three.js Interactive 3D Background Canvas -->
+  <!-- Three.js 3D Cosmic Space Background Canvas -->
   <canvas id="webgl-bg"></canvas>
 
   <div class="container">
@@ -547,7 +547,7 @@
       });
     }
 
-    /* --- 2. Advanced Interactive 3D Card Physics --- */
+    /* --- 2. Interactive 3D Card Physics --- */
     document.querySelectorAll('.card').forEach(card => {
       let reqId = null;
 
@@ -577,70 +577,180 @@
       });
     });
 
-    /* --- 3. Three.js Modern 3D WebGL Background Engine --- */
+    /* --- 3. Three.js Real-time 3D Cosmic Space Engine --- */
     const canvas = document.getElementById('webgl-bg');
     const scene = new THREE.Scene();
+    
+    // Deep space fog for distance depth
+    scene.fog = new THREE.FogExp2(0x02040a, 0.008);
 
-    // Camera setup
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 30;
 
-    // Renderer setup
     const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // Particle Cloud Geometry
-    const particleCount = window.innerWidth < 768 ? 400 : 900;
-    const geometry = new THREE.BufferGeometry();
-    const positions = new Float32Array(particleCount * 3);
-    const scales = new Float32Array(particleCount);
+    // Canvas texture generator for soft glowing star & nebula particles
+    function createGlowTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 64;
+      canvas.height = 64;
+      const ctx = canvas.getContext('2d');
+      const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+      gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+      gradient.addColorStop(0.2, 'rgba(255, 255, 255, 0.8)');
+      gradient.addColorStop(0.5, 'rgba(56, 189, 248, 0.3)');
+      gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 64, 64);
 
-    for (let i = 0; i < particleCount * 3; i += 3) {
-      positions[i] = (Math.random() - 0.5) * 80;
-      positions[i + 1] = (Math.random() - 0.5) * 80;
-      positions[i + 2] = (Math.random() - 0.5) * 80;
-      scales[i / 3] = Math.random() * 1.5 + 0.5;
+      const texture = new THREE.Texture(canvas);
+      texture.needsUpdate = true;
+      return texture;
     }
 
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const particleTexture = createGlowTexture();
 
-    // Particle Material
-    const material = new THREE.PointsMaterial({
-      color: 0x38bdf8,
-      size: 0.35,
+    /* --- Starfield Layer (Multi-colored Stars) --- */
+    const starCount = window.innerWidth < 768 ? 1200 : 2500;
+    const starGeometry = new THREE.BufferGeometry();
+    const starPositions = new Float32Array(starCount * 3);
+    const starColors = new Float32Array(starCount * 3);
+
+    const palette = [
+      new THREE.Color(0xffffff), // Pure white
+      new THREE.Color(0x38bdf8), // Soft cyan
+      new THREE.Color(0xc084fc), // Deep purple
+      new THREE.Color(0x93c5fd)  // Pale blue
+    ];
+
+    for (let i = 0; i < starCount * 3; i += 3) {
+      starPositions[i] = (Math.random() - 0.5) * 160;
+      starPositions[i + 1] = (Math.random() - 0.5) * 160;
+      starPositions[i + 2] = (Math.random() - 0.5) * 160;
+
+      const color = palette[Math.floor(Math.random() * palette.length)];
+      starColors[i] = color.r;
+      starColors[i + 1] = color.g;
+      starColors[i + 2] = color.b;
+    }
+
+    starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+    starGeometry.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
+
+    const starMaterial = new THREE.PointsMaterial({
+      size: 0.8,
+      map: particleTexture,
       transparent: true,
-      opacity: 0.6,
-      blending: THREE.AdditiveBlending
+      vertexColors: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
     });
 
-    const particleSystem = new THREE.Points(geometry, material);
-    scene.add(particleSystem);
+    const starSystem = new THREE.Points(starGeometry, starMaterial);
+    scene.add(starSystem);
 
-    // Dynamic Geometric Wireframe Meshes
-    const torusGeometry = new THREE.TorusKnotGeometry(8, 2.2, 120, 16);
-    const torusMaterial = new THREE.MeshBasicMaterial({
-      color: 0x818cf8,
+    /* --- Cosmic Nebula Particle Cloud --- */
+    const nebulaCount = 350;
+    const nebulaGeometry = new THREE.BufferGeometry();
+    const nebulaPositions = new Float32Array(nebulaCount * 3);
+    const nebulaColors = new Float32Array(nebulaCount * 3);
+
+    for (let i = 0; i < nebulaCount * 3; i += 3) {
+      nebulaPositions[i] = (Math.random() - 0.5) * 90;
+      nebulaPositions[i + 1] = (Math.random() - 0.5) * 90;
+      nebulaPositions[i + 2] = (Math.random() - 0.5) * 90;
+
+      const isPurple = Math.random() > 0.5;
+      nebulaColors[i] = isPurple ? 0.75 : 0.22;
+      nebulaColors[i + 1] = isPurple ? 0.52 : 0.74;
+      nebulaColors[i + 2] = 0.97;
+    }
+
+    nebulaGeometry.setAttribute('position', new THREE.BufferAttribute(nebulaPositions, 3));
+    nebulaGeometry.setAttribute('color', new THREE.BufferAttribute(nebulaColors, 3));
+
+    const nebulaMaterial = new THREE.PointsMaterial({
+      size: 7.0,
+      map: particleTexture,
+      transparent: true,
+      opacity: 0.25,
+      vertexColors: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+
+    const nebulaCloud = new THREE.Points(nebulaGeometry, nebulaMaterial);
+    scene.add(nebulaCloud);
+
+    /* --- 3D Sci-Fi Celestial Bodies --- */
+    // Ringed Exoplanet
+    const planetGroup = new THREE.Group();
+    
+    const planetGeom = new THREE.SphereGeometry(6, 32, 32);
+    const planetMat = new THREE.MeshPhongMaterial({
+      color: 0x0f172a,
+      emissive: 0x1e1b4b,
       wireframe: true,
       transparent: true,
-      opacity: 0.12
+      opacity: 0.4
     });
-    const torusKnot = new THREE.Mesh(torusGeometry, torusMaterial);
-    torusKnot.position.set(-20, 10, -15);
-    scene.add(torusKnot);
+    const planet = new THREE.Mesh(planetGeom, planetMat);
+    planetGroup.add(planet);
 
-    const icoGeometry = new THREE.IcosahedronGeometry(7, 1);
-    const icoMaterial = new THREE.MeshBasicMaterial({
+    // Planet Atmosphere Glow
+    const atmosGeom = new THREE.SphereGeometry(6.3, 32, 32);
+    const atmosMat = new THREE.MeshBasicMaterial({
       color: 0x38bdf8,
       wireframe: true,
       transparent: true,
       opacity: 0.15
     });
-    const icoMesh = new THREE.Mesh(icoGeometry, icoMaterial);
-    icoMesh.position.set(22, -12, -10);
-    scene.add(icoMesh);
+    const atmosphere = new THREE.Mesh(atmosGeom, atmosMat);
+    planetGroup.add(atmosphere);
 
-    // Mouse Movement Parallax Tracking
+    // Planetary Rings
+    const ringGeom = new THREE.RingGeometry(8, 12, 64);
+    const ringMat = new THREE.MeshBasicMaterial({
+      color: 0xc084fc,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.25,
+      wireframe: true
+    });
+    const ring = new THREE.Mesh(ringGeom, ringMat);
+    ring.rotation.x = Math.PI / 2.3;
+    planetGroup.add(ring);
+
+    planetGroup.position.set(-22, 12, -25);
+    scene.add(planetGroup);
+
+    // Distant Cosmic Crystal / Asteroid Geometry
+    const crystalGeom = new THREE.IcosahedronGeometry(5, 0);
+    const crystalMat = new THREE.MeshPhongMaterial({
+      color: 0x38bdf8,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.25
+    });
+    const crystalMesh = new THREE.Mesh(crystalGeom, crystalMat);
+    crystalMesh.position.set(24, -14, -20);
+    scene.add(crystalMesh);
+
+    /* --- Scene Lighting --- */
+    const ambientLight = new THREE.AmbientLight(0x0f172a, 1.5);
+    scene.add(ambientLight);
+
+    const starlight = new THREE.PointLight(0x38bdf8, 2, 100);
+    starlight.position.set(10, 20, 20);
+    scene.add(starlight);
+
+    const purplelight = new THREE.PointLight(0xc084fc, 2, 100);
+    purplelight.position.set(-20, -20, 10);
+    scene.add(purplelight);
+
+    /* --- Parallax & Mouse Interactivity --- */
     let targetMouseX = 0;
     let targetMouseY = 0;
     let currentMouseX = 0;
@@ -651,14 +761,13 @@
       targetMouseY = (event.clientY / window.innerHeight - 0.5) * 2;
     });
 
-    // Window Resize Handler
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
-    // Render Loop
+    /* --- Render Loop --- */
     const clock = new THREE.Clock();
 
     function animate() {
@@ -666,22 +775,25 @@
 
       const elapsedTime = clock.getElapsedTime();
 
-      // Smooth mouse interpolation (lerp)
-      currentMouseX += (targetMouseX - currentMouseX) * 0.05;
-      currentMouseY += (targetMouseY - currentMouseY) * 0.05;
+      // Smooth camera interpolation
+      currentMouseX += (targetMouseX - currentMouseX) * 0.04;
+      currentMouseY += (targetMouseY - currentMouseY) * 0.04;
 
-      // Rotate objects
-      torusKnot.rotation.x = elapsedTime * 0.15;
-      torusKnot.rotation.y = elapsedTime * 0.2;
+      // Rotate Space Elements
+      starSystem.rotation.y = elapsedTime * 0.015;
+      starSystem.rotation.x = elapsedTime * 0.005;
 
-      icoMesh.rotation.x = -elapsedTime * 0.1;
-      icoMesh.rotation.y = elapsedTime * 0.15;
+      nebulaCloud.rotation.y = -elapsedTime * 0.02;
 
-      particleSystem.rotation.y = elapsedTime * 0.03;
+      planetGroup.rotation.y = elapsedTime * 0.08;
+      planetGroup.rotation.x = Math.sin(elapsedTime * 0.05) * 0.1;
 
-      // Parallax scene camera movement
-      camera.position.x = currentMouseX * 4;
-      camera.position.y = -currentMouseY * 4;
+      crystalMesh.rotation.x = elapsedTime * 0.12;
+      crystalMesh.rotation.y = elapsedTime * 0.15;
+
+      // Parallax scene camera motion
+      camera.position.x = currentMouseX * 5;
+      camera.position.y = -currentMouseY * 5;
       camera.lookAt(scene.position);
 
       renderer.render(scene, camera);
