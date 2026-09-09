@@ -132,7 +132,7 @@
       box-shadow: 0 0 20px var(--accent-glow);
     }
 
-    /* Horizontal Category Chips for Mobile */
+    /* Horizontal Category Chips */
     .filter-bar {
       display: flex;
       gap: 0.5rem;
@@ -169,7 +169,7 @@
       box-shadow: 0 0 12px var(--accent-glow);
     }
 
-    /* Modern Adaptive Grid */
+    /* Grid Layout */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -249,7 +249,7 @@
     }
 
     .card h3 {
-      margin-0 0 0.4rem 0;
+      margin: 0 0 0.4rem 0;
       font-size: 1.15rem;
       font-weight: 700;
     }
@@ -343,11 +343,10 @@
         <input type="text" id="searchInput" class="search-box" aria-label="Search portals" placeholder=">_ Search platforms..." onkeyup="filterCards()">
       </div>
 
-      <!-- Quick Filter Chips -->
+      <!-- Category Filter Chips -->
       <div class="filter-bar" id="filterBar">
         <button class="chip active" onclick="setCategory('ALL', this)">All</button>
         <button class="chip" onclick="setCategory('Academics', this)">Academics</button>
-        <button class="chip" onclick="setCategory('AI Tools', this)">AI Tools</button>
         <button class="chip" onclick="setCategory('Skill & Coding', this)">Coding</button>
         <button class="chip" onclick="setCategory('Government', this)">Govt</button>
         <button class="chip" onclick="setCategory('Learning', this)">Learning</button>
@@ -408,11 +407,11 @@
         <div class="card-action">Launch <span>&rarr;</span></div>
       </a>
 
-      <a href="https://sailstudent.sairamit.edu.in/" target="_blank" class="card" data-category="AI Tools" data-title="AI Powered Learning Sairam SAIL Student Portal Login Edwisely">
+      <a href="https://sailstudent.sairamit.edu.in/" target="_blank" class="card" data-category="Academics" data-title="AI Powered Learning Sairam SAIL Student Portal Login Edwisely">
         <div class="card-glare"></div>
         <div class="card-content">
           <div class="card-top">
-            <span class="tag">AI Tools</span>
+            <span class="tag">Academics</span>
             <img src="https://www.google.com/s2/favicons?domain=sairam.edu.in&sz=64" class="card-icon" alt="SAIL AI">
           </div>
           <h3>SAIL AI (Student)🕵️‍♀️</h3>
@@ -421,11 +420,11 @@
         <div class="card-action">Launch <span>&rarr;</span></div>
       </a>
 
-      <a href="https://project.sairamtap.edu.in/" target="_blank" class="card" data-category="AI Tools" data-title="Sairam project Login">
+      <a href="https://project.sairamtap.edu.in/" target="_blank" class="card" data-category="Academics" data-title="Sairam project Login">
         <div class="card-glare"></div>
         <div class="card-content">
           <div class="card-top">
-            <span class="tag">AI Tools</span>
+            <span class="tag">Academics</span>
             <img src="https://www.google.com/s2/favicons?domain=sairam.edu.in&sz=64" class="card-icon" alt="sairamproject">
           </div>
           <h3>Sairam Project🤖</h3>
@@ -434,11 +433,11 @@
         <div class="card-action">Launch <span>&rarr;</span></div>
       </a>
 
-      <a href="https://sailmentor.sairam.edu.in/" target="_blank" class="card" data-category="AI Tools" data-title="SAIL Mentor Sairam AI Powered Learning Faculty Login">
+      <a href="https://sailmentor.sairam.edu.in/" target="_blank" class="card" data-category="Academics" data-title="SAIL Mentor Sairam AI Powered Learning Faculty Login">
         <div class="card-glare"></div>
         <div class="card-content">
           <div class="card-top">
-            <span class="tag">AI Tools</span>
+            <span class="tag">Academics</span>
             <img src="https://www.google.com/s2/favicons?domain=sairam.edu.in&sz=64" class="card-icon" alt="SAIL Mentor">
           </div>
           <h3>SAIL AI (Mentor)</h3>
@@ -621,13 +620,12 @@
       });
     }
 
-    /* --- Mobile & Desktop Dynamic 3D Interaction --- */
+    /* --- Dynamic 3D Interaction --- */
     document.querySelectorAll('.card').forEach(card => {
       let reqId = null;
 
       card.addEventListener('click', () => triggerHaptic());
 
-      // Only run high-frequency tilt on desktop screens for optimal mobile performance
       if (!isMobile) {
         card.addEventListener('mousemove', (e) => {
           const rect = card.getBoundingClientRect();
@@ -667,7 +665,6 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
 
-    /* Dynamic Node Count based on hardware power */
     const nodeCount = isMobile ? 30 : 75;
     const maxDistance = isMobile ? 11 : 14;
     const nodePositions = new Float32Array(nodeCount * 3);
@@ -708,7 +705,6 @@
     const linesMesh = new THREE.LineSegments(linesGeo, linesMat);
     scene.add(linesMesh);
 
-    /* Cyber Shield Object */
     function createCyberShield() {
       const shieldGroup = new THREE.Group();
       const outerGeo = new THREE.IcosahedronGeometry(isMobile ? 3.8 : 5.5, 1);
@@ -727,7 +723,6 @@
     cyberShield.group.position.set(isMobile ? 0 : -22, isMobile ? 18 : 8, -15);
     scene.add(cyberShield.group);
 
-    // Parallax tracking variables
     let targetMouseX = 0, targetMouseY = 0;
     let currentMouseX = 0, currentMouseY = 0;
 
